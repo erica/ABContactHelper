@@ -23,6 +23,7 @@
 + (NSString *) localizedPropertyName: (ABPropertyID) aProperty;
 + (ABPropertyType) propertyType: (ABPropertyID) aProperty;
 + (NSString *) propertyTypeString: (ABPropertyID) aProperty;
++ (NSString *) propertyString: (ABPropertyID) aProperty;
 
 // Creating proper dictionaries
 + (NSDictionary *) dictionaryWithValue: (id) value andLabel: (CFStringRef) label;

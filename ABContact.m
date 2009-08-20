@@ -76,6 +76,35 @@
 	return @"Invalid Property";
 }
 
++ (NSString *) propertyString: (ABPropertyID) aProperty
+{
+	if (aProperty == kABPersonFirstNameProperty) return @"First Name";
+	if (aProperty == kABPersonLastNameProperty) return @"Last Name";
+	if (aProperty == kABPersonMiddleNameProperty) return @"Middle Name";
+	if (aProperty == kABPersonPrefixProperty) return @"Prefix";
+	if (aProperty == kABPersonSuffixProperty) return @"Suffix";
+	if (aProperty == kABPersonNicknameProperty) return @"Nickname";
+	if (aProperty == kABPersonFirstNamePhoneticProperty) return @"Phonetic First Name";
+	if (aProperty == kABPersonLastNamePhoneticProperty) return @"Phonetic Last Name";
+	if (aProperty == kABPersonMiddleNamePhoneticProperty) return @"Phonetic Middle Name";
+	if (aProperty == kABPersonOrganizationProperty) return @"Organization";
+	if (aProperty == kABPersonJobTitleProperty) return @"Job Title";
+	if (aProperty == kABPersonDepartmentProperty) return @"Department";
+	if (aProperty == kABPersonEmailProperty) return @"Email";
+	if (aProperty == kABPersonBirthdayProperty) return @"Birthday";
+	if (aProperty == kABPersonNoteProperty) return @"Note";
+	if (aProperty == kABPersonCreationDateProperty) return @"Creation Date";
+	if (aProperty == kABPersonModificationDateProperty) return @"Modification Date";
+	if (aProperty == kABPersonAddressProperty) return @"Address";
+	if (aProperty == kABPersonDateProperty) return @"Date";
+	if (aProperty == kABPersonKindProperty) return @"Kind";
+	if (aProperty == kABPersonPhoneProperty) return @"Phone";
+	if (aProperty == kABPersonInstantMessageProperty) return @"Instant Message";
+	if (aProperty == kABPersonURLProperty) return @"URL";
+	if (aProperty == kABPersonRelatedNamesProperty) return @"Related Name";
+	return nil;
+}
+
 + (NSDictionary *) dictionaryWithValue: (id) value andLabel: (CFStringRef) label
 {
 	NSMutableDictionary *dict = [NSMutableDictionary dictionary];
