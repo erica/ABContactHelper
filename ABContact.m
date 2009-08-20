@@ -303,6 +303,7 @@
 	if (!success) NSLog(@"Error: %@", [(NSError *)error localizedDescription]);
 	return success;
 }
+
 - (ABMutableMultiValueRef) createMultiValueFromArray: (NSArray *) anArray withType: (ABPropertyType) aType
 {
 	ABMutableMultiValueRef multi = ABMultiValueCreateMutable(aType);
@@ -316,6 +317,7 @@
 	// kABWorkLabel, kABHomeLabel, kABOtherLabel
 	ABMutableMultiValueRef multi = [self createMultiValueFromArray:dictionaries withType:kABMultiStringPropertyType];
 	[self setMulti:multi forProperty:kABPersonEmailProperty];
+	CFRelease(multi);
 }
 
 - (void) setPhoneDictionaries: (NSArray *) dictionaries
@@ -325,6 +327,7 @@
 	// kABPersonPhoneHomeFAXLabel, kABPersonPhoneWorkFAXLabel, kABPersonPhonePagerLabel
 	ABMutableMultiValueRef multi = [self createMultiValueFromArray:dictionaries withType:kABMultiStringPropertyType];
 	[self setMulti:multi forProperty:kABPersonPhoneProperty];
+	CFRelease(multi);
 }
 
 - (void) setUrlDictionaries: (NSArray *) dictionaries
@@ -333,6 +336,7 @@
 	// kABPersonHomePageLabel
 	ABMutableMultiValueRef multi = [self createMultiValueFromArray:dictionaries withType:kABMultiStringPropertyType];
 	[self setMulti:multi forProperty:kABPersonURLProperty];
+	CFRelease(multi);
 }
 
 // Not used/shown on iPhone
@@ -353,6 +357,7 @@
 	// kABPersonAnniversaryLabel
 	ABMutableMultiValueRef multi = [self createMultiValueFromArray:dictionaries withType:kABMultiDateTimePropertyType];
 	[self setMulti:multi forProperty:kABPersonDateProperty];
+	CFRelease(multi);
 }
 
 - (void) setAddressDictionaries: (NSArray *) dictionaries
@@ -361,6 +366,7 @@
 	// kABPersonAddressZIPKey, kABPersonAddressCountryKey, kABPersonAddressCountryCodeKey
 	ABMutableMultiValueRef multi = [self createMultiValueFromArray:dictionaries withType:kABMultiDictionaryPropertyType];
 	[self setMulti:multi forProperty:kABPersonAddressProperty];
+	CFRelease(multi);
 }
 
 - (void) setSmsDictionaries: (NSArray *) dictionaries
@@ -372,6 +378,7 @@
 	// kABPersonInstantMessageServiceAIM, 
 	ABMutableMultiValueRef multi = [self createMultiValueFromArray:dictionaries withType:kABMultiDictionaryPropertyType];
 	[self setMulti:multi forProperty:kABPersonInstantMessageProperty];
+	CFRelease(multi);
 }
 
 #pragma mark Images
