@@ -22,9 +22,13 @@
 	return [[[ABContact alloc] initWithRecord:person] autorelease];
 }
 
+// Thanks to Ciaran
 + (id) contact
 {
-	return [ABContact contactWithRecord:ABPersonCreate()];
+	ABRecordRef person = ABPersonCreate();
+	id contact = [ABContact contactWithRecord:person];
+	CFRelease(person);
+	return contact;
 }
 
 - (void) dealloc
