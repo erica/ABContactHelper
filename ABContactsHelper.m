@@ -18,20 +18,6 @@
 	return array;
 }
 
-+ (NSArray *) people
-{
-	NSArray *contacts = [ABContactsHelper contacts];
-	NSPredicate *pred = [NSPredicate predicateWithFormat:@"recordType == %d", kABPersonType];
-	return [contacts filteredArrayUsingPredicate:pred];
-}
-
-+ (NSArray *) groups
-{
-	NSArray *contacts = [ABContactsHelper contacts];
-	NSPredicate *pred = [NSPredicate predicateWithFormat:@"recordType == %d", kABGroupType];
-	return [contacts filteredArrayUsingPredicate:pred];
-}
-
 + (int) contactsCount
 {
 	ABAddressBookRef addressBook = ABAddressBookCreate();

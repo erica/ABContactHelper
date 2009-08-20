@@ -12,9 +12,7 @@
 @interface ABContactsHelper : NSObject
 
 // Address Book Contacts
-+ (NSArray *) contacts;
-+ (NSArray *) groups;
-+ (NSArray *) people;
++ (NSArray *) contacts; // people
 
 // Counting
 + (int) contactsCount;

@@ -92,7 +92,8 @@
 	
 	// Relationships (Not actually used on the iPhone, but here for the sake of example)
 	 NSMutableArray *relatedarray = [NSMutableArray array];
-	 [relatedarray addObject:[ABContact dictionaryWithValue:@"Ethel Washington" andLabel:kABPersonMotherLabel]];
+	[relatedarray addObject:[ABContact dictionaryWithValue:@"Mary Ball Washington" andLabel:kABPersonMotherLabel]];
+	[relatedarray addObject:[ABContact dictionaryWithValue:@"Augustine Washington" andLabel:kABPersonFatherLabel]];
 	 peep.relatedNameDictionaries = relatedarray;
 	
 	[ABContactsHelper addContact:peep]; // save to address book
@@ -100,7 +101,7 @@
 
 - (void) scan
 {
-	for (ABContact *person in [ABContactsHelper people])
+	for (ABContact *person in [ABContactsHelper contacts])
 	{
 		printf("******\n");
 		printf("Name: %s\n", person.compositeName.UTF8String);
