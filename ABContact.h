@@ -24,6 +24,8 @@
 + (ABPropertyType) propertyType: (ABPropertyID) aProperty;
 + (NSString *) propertyTypeString: (ABPropertyID) aProperty;
 + (NSString *) propertyString: (ABPropertyID) aProperty;
++ (BOOL) propertyIsMultivalue: (ABPropertyID) aProperty;
++ (NSArray *) arrayForProperty: (ABPropertyID) anID inRecord: (ABRecordRef) record;
 
 // Creating proper dictionaries
 + (NSDictionary *) dictionaryWithValue: (id) value andLabel: (CFStringRef) label;

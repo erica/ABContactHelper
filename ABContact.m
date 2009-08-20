@@ -66,7 +66,7 @@
 	if (ptype == kABStringPropertyType) return @"String";
 	if (ptype == kABIntegerPropertyType) return @"Integer";
 	if (ptype == kABRealPropertyType) return @"Float";
-	if (ptype == kABDateTimePropertyType) return @"value";
+	if (ptype == kABDateTimePropertyType) return @"Date";
 	if (ptype == kABDictionaryPropertyType) return @"Dictionary";
 	if (ptype == kABMultiStringPropertyType) return @"Multi String";
 	if (ptype == kABMultiIntegerPropertyType) return @"Multi Integer";
@@ -103,6 +103,46 @@
 	if (aProperty == kABPersonURLProperty) return @"URL";
 	if (aProperty == kABPersonRelatedNamesProperty) return @"Related Name";
 	return nil;
+}
+
++ (BOOL) propertyIsMultivalue: (ABPropertyID) aProperty;
+{
+	if (aProperty == kABPersonFirstNameProperty) return NO;
+	if (aProperty == kABPersonLastNameProperty) return NO;
+	if (aProperty == kABPersonMiddleNameProperty) return NO;
+	if (aProperty == kABPersonPrefixProperty) return NO;
+	if (aProperty == kABPersonSuffixProperty) return NO;
+	if (aProperty == kABPersonNicknameProperty) return NO;
+	if (aProperty == kABPersonFirstNamePhoneticProperty) return NO;
+	if (aProperty == kABPersonLastNamePhoneticProperty) return NO;
+	if (aProperty == kABPersonMiddleNamePhoneticProperty) return NO;
+	if (aProperty == kABPersonOrganizationProperty) return NO;
+	if (aProperty == kABPersonJobTitleProperty) return NO;
+	if (aProperty == kABPersonDepartmentProperty) return NO;
+	if (aProperty == kABPersonBirthdayProperty) return NO;
+	if (aProperty == kABPersonNoteProperty) return NO;
+	if (aProperty == kABPersonCreationDateProperty) return NO;
+	if (aProperty == kABPersonModificationDateProperty) return NO;
+	
+	return YES;
+	/*
+	if (aProperty == kABPersonEmailProperty) return YES;
+	if (aProperty == kABPersonAddressProperty) return YES;
+	if (aProperty == kABPersonDateProperty) return YES;
+	if (aProperty == kABPersonPhoneProperty) return YES;
+	if (aProperty == kABPersonInstantMessageProperty) return YES;
+	if (aProperty == kABPersonURLProperty) return YES;
+	if (aProperty == kABPersonRelatedNamesProperty) return YES;
+	 */
+}
+
++ (NSArray *) arrayForProperty: (ABPropertyID) anID inRecord: (ABRecordRef) record
+{
+	// Recover the property for a given record
+	CFTypeRef theProperty = ABRecordCopyValue(record, anID);
+	NSArray *items = (NSArray *)ABMultiValueCopyArrayOfAllValues(theProperty);
+	CFRelease(theProperty);
+	return [items autorelease];
 }
 
 + (NSDictionary *) dictionaryWithValue: (id) value andLabel: (CFStringRef) label
