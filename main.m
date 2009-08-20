@@ -79,9 +79,11 @@
 	peep.dateDictionaries = dates;
 	
 	// Addresses
-	NSDictionary *addy = [ABContact addressWithStreet:@"1600 Pennsylvania Avenue" withCity:@"Arlington" withState:@"Virginia" withZip:@"20202" withCountry:nil withCode:nil];
 	NSMutableArray *addies = [NSMutableArray array];
-	[addies addObject:[ABContact dictionaryWithValue:addy andLabel:kABHomeLabel]];
+	NSDictionary *whaddy = [ABContact addressWithStreet:@"1600 Pennsylvania Avenue" withCity:@"Arlington" withState:@"Virginia" withZip:@"20202" withCountry:nil withCode:nil];
+	[addies addObject:[ABContact dictionaryWithValue:whaddy andLabel:kABWorkLabel]];
+	NSDictionary *bpaddy = [ABContact addressWithStreet:@"1 Main Street" withCity:@"Westmoreland" withState:@"Virginia" withZip:@"20333" withCountry:nil withCode:nil];
+	[addies addObject:[ABContact dictionaryWithValue:bpaddy andLabel:kABHomeLabel]];
 	peep.addressDictionaries = addies;
 
 	// SMSes
@@ -101,6 +103,7 @@
 
 - (void) scan
 {
+	// Regular data dump
 	for (ABContact *person in [ABContactsHelper contacts])
 	{
 		printf("******\n");
@@ -115,6 +118,21 @@
 		printf("Phones: %s\n", [person.phoneDictionaries description].UTF8String);
 		printf("URLs: %s\n", [person.urlDictionaries description].UTF8String);
 		printf("Addresses: %s\n\n", [person.addressDictionaries description].UTF8String);
+	}
+	
+	// Example for matching phone numbers
+	for (ABContact *person in [ABContactsHelper contactsMatchingPhone:@"303"])
+	{
+		printf("******\n");
+		printf("Name: %s\n", person.compositeName.UTF8String);
+		printf("Phones: %s\n", person.phonenumbers.UTF8String);
+	}
+	
+	// Example for matching names
+	for (ABContact *person in [ABContactsHelper contactsMatchingName:@"Jo"])
+	{
+		printf("******\n");
+		printf("Name: %s\n", person.contactName.UTF8String);
 	}
 }	
 

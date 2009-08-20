@@ -87,4 +87,12 @@
 	contacts = [contacts filteredArrayUsingPredicate:pred];
 	return contacts;
 }
+
++ (NSArray *) contactsMatchingPhone: (NSString *) number
+{
+	NSPredicate *pred;
+	NSArray *contacts = [ABContactsHelper contacts];
+	pred = [NSPredicate predicateWithFormat:@"phonenumbers contains[cd] %@", number];
+	return [contacts filteredArrayUsingPredicate:pred];
+}
 @end

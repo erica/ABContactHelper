@@ -79,6 +79,10 @@
 @property (readonly) NSArray *smsArray;
 @property (readonly) NSArray *smsLabels;
 
+@property (readonly) NSString *emailaddresses;
+@property (readonly) NSString *phonenumbers;
+@property (readonly) NSString *urls;
+
 // Each of these uses an array of dictionaries
 @property (assign) NSArray *emailDictionaries;
 @property (assign) NSArray *phoneDictionaries;

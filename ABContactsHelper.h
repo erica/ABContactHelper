@@ -29,6 +29,7 @@
 + (ABContact *) contactWithID: (ABRecordID) aRecordID;
 + (NSArray *) contactsMatchingName: (NSString *) fname;
 + (NSArray *) contactsMatchingName: (NSString *) fname andName: (NSString *) lname;
++ (NSArray *) contactsMatchingPhone: (NSString *) number;
 @end
 
 // For the simple utility of it. Feel free to comment out if desired

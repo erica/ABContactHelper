@@ -219,6 +219,10 @@
 - (NSArray *) smsArray {return [self arrayForProperty:kABPersonInstantMessageProperty];}
 - (NSArray *) smsLabels {return [self labelsForProperty:kABPersonInstantMessageProperty];}
 
+- (NSString *) phonenumbers {return [self.phoneArray componentsJoinedByString:@" "];}
+- (NSString *) emailaddresses {return [self.emailArray componentsJoinedByString:@" "];}
+- (NSString *) urls {return [self.urlArray componentsJoinedByString:@" "];}
+
 - (NSArray *) dictionaryArrayForProperty: (ABPropertyID) aProperty
 {
 	NSArray *valueArray = [self arrayForProperty:aProperty];
