@@ -14,6 +14,7 @@
 		8E3A1F090FAA199F009B0518 /* cover320x416.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E3A1F080FAA199F009B0518 /* cover320x416.png */; };
 		8E4156E90FA4EE0E0006D27C /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E4156E70FA4EE0E0006D27C /* Default.png */; };
 		8E4156EA0FA4EE0E0006D27C /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E4156E80FA4EE0E0006D27C /* icon.png */; };
+		8E6DF3F0103F101E00E12A1D /* ABGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E6DF3EF103F101E00E12A1D /* ABGroup.m */; };
 		8E785FCB0FCDB853006EA81F /* TestBedViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8E785FCA0FCDB853006EA81F /* TestBedViewController.xib */; };
 		8EE3297D103C8A9400FBD34F /* ABContactsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EE3297C103C8A9400FBD34F /* ABContactsHelper.m */; };
 		8EE329C7103C928500FBD34F /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EE329C5103C928500FBD34F /* AddressBook.framework */; };
@@ -32,6 +33,8 @@
 		8E3A1F080FAA199F009B0518 /* cover320x416.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cover320x416.png; sourceTree = "<group>"; };
 		8E4156E70FA4EE0E0006D27C /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		8E4156E80FA4EE0E0006D27C /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		8E6DF3EE103F101E00E12A1D /* ABGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABGroup.h; sourceTree = "<group>"; };
+		8E6DF3EF103F101E00E12A1D /* ABGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABGroup.m; sourceTree = "<group>"; };
 		8E785FCA0FCDB853006EA81F /* TestBedViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TestBedViewController.xib; sourceTree = "<group>"; };
 		8EE3297B103C8A9400FBD34F /* ABContactsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABContactsHelper.h; sourceTree = "<group>"; };
 		8EE3297C103C8A9400FBD34F /* ABContactsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABContactsHelper.m; sourceTree = "<group>"; };
@@ -68,6 +71,8 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				8E6DF3EE103F101E00E12A1D /* ABGroup.h */,
+				8E6DF3EF103F101E00E12A1D /* ABGroup.m */,
 				8EE32C90103CE3CD00FBD34F /* ABContact.h */,
 				8EE32C91103CE3CD00FBD34F /* ABContact.m */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
@@ -164,6 +169,7 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				8EE3297D103C8A9400FBD34F /* ABContactsHelper.m in Sources */,
 				8EE32C92103CE3CD00FBD34F /* ABContact.m in Sources */,
+				8E6DF3F0103F101E00E12A1D /* ABGroup.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

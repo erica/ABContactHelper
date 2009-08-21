@@ -8,28 +8,34 @@
 #import <AddressBook/AddressBook.h>
 #import <AddressBookUI/AddressBookUI.h>
 #import "ABContact.h"
+#import "ABGroup.h"
 
 @interface ABContactsHelper : NSObject
 
 // Address Book Contacts
 + (NSArray *) contacts; // people
++ (NSArray *) groups; // groups
 
 // Counting
 + (int) contactsCount;
 + (int) contactsWithImageCount;
 + (int) contactsWithoutImageCount;
++ (int) numberOfGroups;
 
 // Sorting
 + (BOOL) firstNameSorting;
 
-// Add contacts
+// Add contacts and groups
 + (BOOL) addContact: (ABContact *) aContact withError: (NSError **) error;
++ (BOOL) addGroup: (ABGroup *) aGroup withError: (NSError **) error;
 
 // Find contacts
-+ (ABContact *) contactWithID: (ABRecordID) aRecordID;
 + (NSArray *) contactsMatchingName: (NSString *) fname;
 + (NSArray *) contactsMatchingName: (NSString *) fname andName: (NSString *) lname;
 + (NSArray *) contactsMatchingPhone: (NSString *) number;
+
+// Find groups
++ (NSArray *) groupsMatchingName: (NSString *) fname;
 @end
 
 // For the simple utility of it. Feel free to comment out if desired

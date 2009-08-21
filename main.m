@@ -146,13 +146,51 @@
 		printf("******\n");
 		printf("Name: %s\n", person.contactName.UTF8String);
 	}
-}	
+}
+
+- (void) viewgroups
+{
+	printf("There are %d groups\n", [ABContactsHelper numberOfGroups]);
+	for (ABGroup *group in [ABContactsHelper groups])
+	{
+		printf("Name: %s\n", group.name.UTF8String);
+		NSArray *members = group.members;
+		printf("Members: %d\n", members.count);
+
+		int n = 1;
+		for (ABContact *contact in members)
+			printf("%d: %s\n", n++, contact.compositeName.UTF8String);
+	}
+}
+
+- (void) addGroup
+{
+	NSArray *groups = [ABContactsHelper groupsMatchingName:@"Everyone"];
+	printf("%d matching groups found\n", groups.count);
+	ABGroup *group = groups.count ? [groups lastObject] : [ABGroup group];
+	
+	// Remove existing group to allow modification
+	if (groups.count) [group removeSelfFromAddressBook:nil];
+
+	// set name
+	group.name = @"Everyone";
+	
+	// add members
+	NSArray *contacts = [ABContactsHelper contacts];
+	for (ABContact *contact in contacts)
+		[group addMember:contact withError:nil];
+
+	// Save the new or modified group
+	[ABContactsHelper addGroup:group withError:nil];
+}
 
 - (void) viewDidLoad
 {
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
-	self.navigationItem.rightBarButtonItem = BARBUTTON(@"Add GW", @selector(addGW));
-	self.navigationItem.leftBarButtonItem = BARBUTTON(@"Scan", @selector(scan));
+	// self.navigationItem.rightBarButtonItem = BARBUTTON(@"Add GW", @selector(addGW));
+	self.navigationItem.rightBarButtonItem = BARBUTTON(@"Groups", @selector(viewgroups));
+	// self.navigationItem.leftBarButtonItem = BARBUTTON(@"Scan", @selector(scan));
+	self.navigationItem.leftBarButtonItem = BARBUTTON(@"Add", @selector(addGroup));
 }
 @end
 

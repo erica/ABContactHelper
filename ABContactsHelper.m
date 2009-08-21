@@ -48,6 +48,27 @@
 	return ncount;
 }
 
+// Groups
++ (int) numberOfGroups
+{
+	ABAddressBookRef addressBook = ABAddressBookCreate();
+	NSArray *groups = (NSArray *)ABAddressBookCopyArrayOfAllGroups(addressBook);
+	int ncount = groups.count;
+	[groups release];
+	return ncount;
+}
+
++ (NSArray *) groups
+{
+	ABAddressBookRef addressBook = ABAddressBookCreate();
+	NSArray *groups = (NSArray *)ABAddressBookCopyArrayOfAllGroups(addressBook);
+	NSMutableArray *array = [NSMutableArray arrayWithCapacity:groups.count];
+	for (id group in groups)
+		[array addObject:[ABGroup groupWithRecord:(ABRecordRef)group]];
+	[groups release];
+	return array;
+}
+
 // Sorting
 + (BOOL) firstNameSorting
 {
@@ -64,12 +85,11 @@
 	return ABAddressBookSave(addressBook, (CFErrorRef *) error);
 }
 
-+ (ABContact *) contactWithID: (ABRecordID) aRecordID
++ (BOOL) addGroup: (ABGroup *) aGroup withError: (NSError **) error
 {
-	NSArray *contacts = [ABContactsHelper contacts];
-	NSPredicate *pred = [NSPredicate predicateWithFormat:@"recordID == %d", aRecordID];
-	NSArray *results = [contacts filteredArrayUsingPredicate:pred];
-	return results.count ? [results lastObject] : nil;
+	ABAddressBookRef addressBook = ABAddressBookCreate();
+	if (!ABAddressBookAddRecord(addressBook, aGroup.record, (CFErrorRef *) error)) return NO;
+	return ABAddressBookSave(addressBook, (CFErrorRef *) error);
 }
 
 + (NSArray *) contactsMatchingName: (NSString *) fname
@@ -97,5 +117,13 @@
 	NSArray *contacts = [ABContactsHelper contacts];
 	pred = [NSPredicate predicateWithFormat:@"phonenumbers contains[cd] %@", number];
 	return [contacts filteredArrayUsingPredicate:pred];
+}
+
++ (NSArray *) groupsMatchingName: (NSString *) fname
+{
+	NSPredicate *pred;
+	NSArray *groups = [ABContactsHelper groups];
+	pred = [NSPredicate predicateWithFormat:@"name contains[cd] %@ ", fname];
+	return [groups filteredArrayUsingPredicate:pred];
 }
 @end

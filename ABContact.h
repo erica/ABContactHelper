@@ -16,6 +16,7 @@
 // Convenience allocation methods
 + (id) contact;
 + (id) contactWithRecord: (ABRecordRef) record;
++ (id) contactWithRecordID: (ABRecordID) recordID;
 
 // Class utility methods
 + (NSString *) localizedPropertyName: (ABPropertyID) aProperty;
@@ -60,7 +61,7 @@
 @property (nonatomic, readonly) NSString *compositeName; // via AB
 
 #pragma mark DATE
-@property (nonatomic, readonly) NSDate *birthday;
+@property (nonatomic, assign) NSDate *birthday;
 @property (nonatomic, readonly) NSDate *creationDate;
 @property (nonatomic, readonly) NSDate *modificationDate;
 

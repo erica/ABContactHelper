@@ -22,6 +22,15 @@
 	return [[[ABContact alloc] initWithRecord:person] autorelease];
 }
 
++ (id) contactWithRecordID: (ABRecordID) recordID
+{
+	ABAddressBookRef addressBook = ABAddressBookCreate();
+	ABRecordRef contactrec = ABAddressBookGetPersonWithRecordID(addressBook, recordID);
+	ABContact *contact = [self contactWithRecord:contactrec];
+	CFRelease(contactrec);
+	return contact;
+}
+
 // Thanks to Ciaran
 + (id) contact
 {
@@ -386,6 +395,18 @@
 - (void) setJobtitle: (NSString *) aString {[self setString: aString forProperty: kABPersonJobTitleProperty];}
 - (void) setDepartment: (NSString *) aString {[self setString: aString forProperty: kABPersonDepartmentProperty];}
 - (void) setNote: (NSString *) aString {[self setString: aString forProperty: kABPersonNoteProperty];}
+
+#pragma mark Setting Dates
+
+- (BOOL) setDate: (NSDate *) aDate forProperty:(ABPropertyID) anID
+{
+	CFErrorRef error;
+	BOOL success = ABRecordSetValue(record, anID, (CFDateRef) aDate, &error);
+	if (!success) NSLog(@"Error: %@", [(NSError *)error localizedDescription]);
+	return success;
+}
+
+- (void) setBirthday: (NSDate *) aDate {[self setDate: aDate forProperty: kABPersonBirthdayProperty];}
 
 #pragma mark Setting MultiValue
 
