@@ -23,7 +23,7 @@
 + (BOOL) firstNameSorting;
 
 // Add contacts
-+ (NSString *) addContact: (ABContact *) aContact;
++ (BOOL) addContact: (ABContact *) aContact withError: (NSError **) error;
 
 // Find contacts
 + (ABContact *) contactWithID: (ABRecordID) aRecordID;

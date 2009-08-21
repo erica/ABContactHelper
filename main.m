@@ -42,7 +42,17 @@
 	printf("%d matching contacts found\n", contacts.count);
 	ABContact *peep = contacts.count ? [contacts lastObject] : [ABContact contact];
 	
-	if (contacts.count) [peep removeSelfFromAddressBook]; // remove in preparation to update contact
+	if (contacts.count) 
+	{
+		NSError *error;
+		if (![peep removeSelfFromAddressBook:&error]) // remove in preparation to update contact
+		{
+			NSLog(@"Error: %@", [error localizedDescription]);
+			return;
+		}
+		
+	}
+
 	printf("Record %d\n", peep.recordID);
 	
 	// Person basic string information (see full list in ABContact)
@@ -98,7 +108,9 @@
 	[relatedarray addObject:[ABContact dictionaryWithValue:@"Augustine Washington" andLabel:kABPersonFatherLabel]];
 	 peep.relatedNameDictionaries = relatedarray;
 	
-	[ABContactsHelper addContact:peep]; // save to address book
+	NSError *error;
+	if (![ABContactsHelper addContact:peep withError:&error]) // save to address book
+		NSLog(@"Error: %@", [error localizedDescription]);
 }
 
 - (void) scan

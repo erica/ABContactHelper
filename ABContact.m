@@ -38,20 +38,9 @@
 }
 
 #pragma mark utilities
-+ (NSString *) cleanLabel: (NSString *) aLabel
-{
-	return [[aLabel stringByReplacingOccurrencesOfString:@"_$!<" withString:@""] stringByReplacingOccurrencesOfString:@">!$_" withString:@""];
-}
-
-+ (CFStringRef) formattedLabel: (NSString *) aLabel
-{
-	return (CFStringRef) [NSString stringWithFormat:@"_$!<%@>!$_", aLabel];
-}
-
 + (NSString *) localizedPropertyName: (ABPropertyID) aProperty
 {
-	NSString *propertyName = (NSString *)ABPersonCopyLocalizedPropertyName(aProperty);
-	return [propertyName autorelease];
+	return [(NSString *)ABPersonCopyLocalizedPropertyName(aProperty) autorelease];
 }
 
 + (ABPropertyType) propertyType: (ABPropertyID) aProperty
@@ -59,25 +48,56 @@
 	return ABPersonGetTypeOfProperty(aProperty);
 }
 
+// Thanks to Eridius for suggestions re switch
 + (NSString *) propertyTypeString: (ABPropertyID) aProperty
 {
-	ABPropertyType ptype = ABPersonGetTypeOfProperty(aProperty);
-	if (ptype == kABInvalidPropertyType) return @"Invalid Property";
-	if (ptype == kABStringPropertyType) return @"String";
-	if (ptype == kABIntegerPropertyType) return @"Integer";
-	if (ptype == kABRealPropertyType) return @"Float";
-	if (ptype == kABDateTimePropertyType) return @"Date";
-	if (ptype == kABDictionaryPropertyType) return @"Dictionary";
-	if (ptype == kABMultiStringPropertyType) return @"Multi String";
-	if (ptype == kABMultiIntegerPropertyType) return @"Multi Integer";
-	if (ptype == kABMultiRealPropertyType) return @"Multi Float";
-	if (ptype == kABMultiDateTimePropertyType) return @"Multi Date";
-	if (ptype == kABMultiDictionaryPropertyType) return @"Multi Dictionary";
-	return @"Invalid Property";
+	switch (ABPersonGetTypeOfProperty(aProperty))
+	{
+		case kABInvalidPropertyType: return @"Invalid Property";
+		case kABStringPropertyType: return @"String";
+		case kABIntegerPropertyType: return @"Integer";
+		case kABRealPropertyType: return @"Float";
+		case kABDateTimePropertyType: return @"Date";
+		case kABDictionaryPropertyType: return @"Dictionary";
+		case kABMultiStringPropertyType: return @"Multi String";
+		case kABMultiIntegerPropertyType: return @"Multi Integer";
+		case kABMultiRealPropertyType: return @"Multi Float";
+		case kABMultiDateTimePropertyType: return @"Multi Date";
+		case kABMultiDictionaryPropertyType: return @"Multi Dictionary";
+		default: return @"Invalid Property";
+	}
 }
 
 + (NSString *) propertyString: (ABPropertyID) aProperty
 {
+	/* switch (aProperty) // Sorry, this won't compile
+	{
+		case kABPersonFirstNameProperty: return @"First Name";
+		case kABPersonLastNameProperty: return @"Last Name";
+		case kABPersonMiddleNameProperty: return @"Middle Name";
+		case kABPersonPrefixProperty: return @"Prefix";
+		case kABPersonSuffixProperty: return @"Suffix";
+		case kABPersonNicknameProperty: return @"Nickname";
+		case kABPersonFirstNamePhoneticProperty: return @"Phonetic First Name";
+		case kABPersonLastNamePhoneticProperty: return @"Phonetic Last Name";
+		case kABPersonMiddleNamePhoneticProperty: return @"Phonetic Middle Name";
+		case kABPersonOrganizationProperty: return @"Organization";
+		case kABPersonJobTitleProperty: return @"Job Title";
+		case kABPersonDepartmentProperty: return @"Department";
+		case kABPersonEmailProperty: return @"Email";
+		case kABPersonBirthdayProperty: return @"Birthday";
+		case kABPersonNoteProperty: return @"Note";
+		case kABPersonCreationDateProperty: return @"Creation Date";
+		case kABPersonModificationDateProperty: return @"Modification Date";
+		case kABPersonAddressProperty: return @"Address";
+		case kABPersonDateProperty: return @"Date";
+		case kABPersonKindProperty: return @"Kind";
+		case kABPersonPhoneProperty: return @"Phone";
+		case kABPersonInstantMessageProperty: return @"Instant Message";
+		case kABPersonURLProperty: return @"URL";
+		case kABPersonRelatedNamesProperty: return @"Related Name";			
+	} */
+	
 	if (aProperty == kABPersonFirstNameProperty) return @"First Name";
 	if (aProperty == kABPersonLastNameProperty) return @"Last Name";
 	if (aProperty == kABPersonMiddleNameProperty) return @"Middle Name";
@@ -145,6 +165,11 @@
 	return [items autorelease];
 }
 
++ (id) objectForProperty: (ABPropertyID) anID inRecord: (ABRecordRef) record
+{
+	return [(id) ABRecordCopyValue(record, anID) autorelease];
+}
+
 + (NSDictionary *) dictionaryWithValue: (id) value andLabel: (CFStringRef) label
 {
 	NSMutableDictionary *dict = [NSMutableDictionary dictionary];
@@ -175,16 +200,12 @@
 	return sms;
 }
 
-- (NSString *) removeSelfFromAddressBook
+// Thanks to Eridius for suggestions re: error
+- (BOOL) removeSelfFromAddressBook: (NSError **) error
 {
-	// Record still exists after operation but is not in address book
-	// Fetch the record back to recover its proper id
 	ABAddressBookRef addressBook = ABAddressBookCreate();
-	CFErrorRef error;
-	BOOL success = ABAddressBookRemoveRecord(addressBook, self.record, &error);
-	if (!success) return [(NSError *)error localizedDescription];	
-	success = ABAddressBookSave(addressBook, &error);
-	return success ? nil : [(NSError *)error localizedDescription];
+	if (!ABAddressBookRemoveRecord(addressBook, self.record, (CFErrorRef *) error)) return NO;
+	return ABAddressBookSave(addressBook,  (CFErrorRef *) error);
 }
 
 #pragma mark Record ID and Type
@@ -229,9 +250,8 @@
 			[string appendFormat:@" "];
 	}
 	
-	if (self.organization) [string appendFormat:self.organization];
-	
-	return string;
+	if (self.organization) [string appendString:self.organization];
+	return [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 
 - (NSString *) compositeName

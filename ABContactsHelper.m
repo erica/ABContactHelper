@@ -7,11 +7,15 @@
 #import "ABContactsHelper.h"
 
 @implementation ABContactsHelper
+/*
+ Note: You cannot CFRelease the addressbook after ABAddressBookCreate();
+ */
+
 + (NSArray *) contacts
 {
-	NSMutableArray *array = [NSMutableArray array];
 	ABAddressBookRef addressBook = ABAddressBookCreate();
 	NSArray *thePeople = (NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
+	NSMutableArray *array = [NSMutableArray arrayWithCapacity:thePeople.count];
 	for (id person in thePeople)
 		[array addObject:[ABContact contactWithRecord:(ABRecordRef)person]];
 	[thePeople release];
@@ -51,14 +55,13 @@
 }
 
 #pragma mark Contact Management
-+ (NSString *) addContact: (ABContact *) aContact
+
+// Thanks to Eridius for suggestions re: error
++ (BOOL) addContact: (ABContact *) aContact withError: (NSError **) error
 {
 	ABAddressBookRef addressBook = ABAddressBookCreate();
-	CFErrorRef error;
-	BOOL success = ABAddressBookAddRecord(addressBook, aContact.record, &error);
-	if (!success) return [(NSError *)error localizedDescription];	
-	success = ABAddressBookSave(addressBook, &error);
-	return success ? nil : [(NSError *)error localizedDescription];
+	if (!ABAddressBookAddRecord(addressBook, aContact.record, (CFErrorRef *) error)) return NO;
+	return ABAddressBookSave(addressBook, (CFErrorRef *) error);
 }
 
 + (ABContact *) contactWithID: (ABRecordID) aRecordID

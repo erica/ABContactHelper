@@ -13,19 +13,18 @@
 	ABRecordRef record;
 }
 
-// Convenience methods
+// Convenience allocation methods
 + (id) contact;
 + (id) contactWithRecord: (ABRecordRef) record;
 
 // Class utility methods
-+ (NSString *) cleanLabel: (NSString *) aLabel;
-+ (CFStringRef) formattedLabel: (NSString *) aLabel;
 + (NSString *) localizedPropertyName: (ABPropertyID) aProperty;
 + (ABPropertyType) propertyType: (ABPropertyID) aProperty;
 + (NSString *) propertyTypeString: (ABPropertyID) aProperty;
 + (NSString *) propertyString: (ABPropertyID) aProperty;
 + (BOOL) propertyIsMultivalue: (ABPropertyID) aProperty;
 + (NSArray *) arrayForProperty: (ABPropertyID) anID inRecord: (ABRecordRef) record;
++ (id) objectForProperty: (ABPropertyID) anID inRecord: (ABRecordRef) record;
 
 // Creating proper dictionaries
 + (NSDictionary *) dictionaryWithValue: (id) value andLabel: (CFStringRef) label;
@@ -35,67 +34,67 @@
 + (NSDictionary *) smsWithService: (CFStringRef) service andUser: (NSString *) userName;
 
 // Instance utility methods
-- (NSString *) removeSelfFromAddressBook;
+- (BOOL) removeSelfFromAddressBook: (NSError **) error;
 
-@property (readonly) ABRecordRef record;
-@property (readonly) ABRecordID recordID;
-@property (readonly) ABRecordType recordType;
-@property (readonly) BOOL isPerson;
+@property (nonatomic, readonly) ABRecordRef record;
+@property (nonatomic, readonly) ABRecordID recordID;
+@property (nonatomic, readonly) ABRecordType recordType;
+@property (nonatomic, readonly) BOOL isPerson;
 
 #pragma mark SINGLE VALUE STRING
-@property (assign) NSString *firstname;
-@property (assign) NSString *lastname;
-@property (assign) NSString *middlename;
-@property (assign) NSString *prefix;
-@property (assign) NSString *suffix;
-@property (assign) NSString *nickname;
-@property (assign) NSString *firstnamephonetic;
-@property (assign) NSString *lastnamephonetic;
-@property (assign) NSString *middlenamephonetic;
-@property (assign) NSString *organization;
-@property (assign) NSString *jobtitle;
-@property (assign) NSString *department;
-@property (assign) NSString *note;
+@property (nonatomic, assign) NSString *firstname;
+@property (nonatomic, assign) NSString *lastname;
+@property (nonatomic, assign) NSString *middlename;
+@property (nonatomic, assign) NSString *prefix;
+@property (nonatomic, assign) NSString *suffix;
+@property (nonatomic, assign) NSString *nickname;
+@property (nonatomic, assign) NSString *firstnamephonetic;
+@property (nonatomic, assign) NSString *lastnamephonetic;
+@property (nonatomic, assign) NSString *middlenamephonetic;
+@property (nonatomic, assign) NSString *organization;
+@property (nonatomic, assign) NSString *jobtitle;
+@property (nonatomic, assign) NSString *department;
+@property (nonatomic, assign) NSString *note;
 
-@property (readonly) NSString *contactName; // my friendly utility
-@property (readonly) NSString *compositeName; // via AB
+@property (nonatomic, readonly) NSString *contactName; // my friendly utility
+@property (nonatomic, readonly) NSString *compositeName; // via AB
 
 #pragma mark DATE
-@property (readonly) NSDate *birthday;
-@property (readonly) NSDate *creationDate;
-@property (readonly) NSDate *modificationDate;
+@property (nonatomic, readonly) NSDate *birthday;
+@property (nonatomic, readonly) NSDate *creationDate;
+@property (nonatomic, readonly) NSDate *modificationDate;
 
 #pragma mark MULTIVALUE
 // Each of these produces an array of NSStrings
-@property (readonly) NSArray *emailArray;
-@property (readonly) NSArray *emailLabels;
-@property (readonly) NSArray *phoneArray;
-@property (readonly) NSArray *phoneLabels;
-@property (readonly) NSArray *relatedNameArray;
-@property (readonly) NSArray *relatedNameLabels;
-@property (readonly) NSArray *urlArray;
-@property (readonly) NSArray *urlLabels;
-@property (readonly) NSArray *dateArray;
-@property (readonly) NSArray *dateLabels;
-@property (readonly) NSArray *addressArray;
-@property (readonly) NSArray *addressLabels;
-@property (readonly) NSArray *smsArray;
-@property (readonly) NSArray *smsLabels;
+@property (nonatomic, readonly) NSArray *emailArray;
+@property (nonatomic, readonly) NSArray *emailLabels;
+@property (nonatomic, readonly) NSArray *phoneArray;
+@property (nonatomic, readonly) NSArray *phoneLabels;
+@property (nonatomic, readonly) NSArray *relatedNameArray;
+@property (nonatomic, readonly) NSArray *relatedNameLabels;
+@property (nonatomic, readonly) NSArray *urlArray;
+@property (nonatomic, readonly) NSArray *urlLabels;
+@property (nonatomic, readonly) NSArray *dateArray;
+@property (nonatomic, readonly) NSArray *dateLabels;
+@property (nonatomic, readonly) NSArray *addressArray;
+@property (nonatomic, readonly) NSArray *addressLabels;
+@property (nonatomic, readonly) NSArray *smsArray;
+@property (nonatomic, readonly) NSArray *smsLabels;
 
-@property (readonly) NSString *emailaddresses;
-@property (readonly) NSString *phonenumbers;
-@property (readonly) NSString *urls;
+@property (nonatomic, readonly) NSString *emailaddresses;
+@property (nonatomic, readonly) NSString *phonenumbers;
+@property (nonatomic, readonly) NSString *urls;
 
 // Each of these uses an array of dictionaries
-@property (assign) NSArray *emailDictionaries;
-@property (assign) NSArray *phoneDictionaries;
-@property (assign) NSArray *relatedNameDictionaries;
-@property (assign) NSArray *urlDictionaries;
-@property (assign) NSArray *dateDictionaries;
-@property (assign) NSArray *addressDictionaries;
-@property (assign) NSArray *smsDictionaries;
+@property (nonatomic, assign) NSArray *emailDictionaries;
+@property (nonatomic, assign) NSArray *phoneDictionaries;
+@property (nonatomic, assign) NSArray *relatedNameDictionaries;
+@property (nonatomic, assign) NSArray *urlDictionaries;
+@property (nonatomic, assign) NSArray *dateDictionaries;
+@property (nonatomic, assign) NSArray *addressDictionaries;
+@property (nonatomic, assign) NSArray *smsDictionaries;
 
 #pragma mark IMAGES
-@property (assign) UIImage *image;
+@property (nonatomic, assign) UIImage *image;
 
 @end
