@@ -99,7 +99,7 @@
 
 - (NSString *) name
 {
-	NSString *string = (NSString *)ABRecordCopyCompositeName(record);
+	NSString *string = [self getRecordString:kABGroupNameProperty];
 	return [string autorelease];
 }
 

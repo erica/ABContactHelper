@@ -10,6 +10,10 @@
 /*
  Note: You cannot CFRelease the addressbook after ABAddressBookCreate();
  */
++ (ABAddressBookRef) addressBook
+{
+	return ABAddressBookCreate();
+}
 
 + (NSArray *) contacts
 {
