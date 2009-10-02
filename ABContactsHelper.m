@@ -6,18 +6,20 @@
 
 #import "ABContactsHelper.h"
 
+#define CFAutorelease(obj) ({CFTypeRef _obj = (obj); (_obj == NULL) ? NULL : [(id)CFMakeCollectable(_obj) autorelease]; })
+
 @implementation ABContactsHelper
 /*
- Note: You cannot CFRelease the addressbook after ABAddressBookCreate();
+ Note: You cannot CFRelease the addressbook after CFAutorelease(ABAddressBookCreate());
  */
 + (ABAddressBookRef) addressBook
 {
-	return ABAddressBookCreate();
+	return CFAutorelease(ABAddressBookCreate());
 }
 
 + (NSArray *) contacts
 {
-	ABAddressBookRef addressBook = ABAddressBookCreate();
+	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
 	NSArray *thePeople = (NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
 	NSMutableArray *array = [NSMutableArray arrayWithCapacity:thePeople.count];
 	for (id person in thePeople)
@@ -28,13 +30,13 @@
 
 + (int) contactsCount
 {
-	ABAddressBookRef addressBook = ABAddressBookCreate();
+	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
 	return ABAddressBookGetPersonCount(addressBook);
 }
 
 + (int) contactsWithImageCount
 {
-	ABAddressBookRef addressBook = ABAddressBookCreate();
+	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
 	NSArray *peopleArray = (NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
 	int ncount = 0;
 	for (id person in peopleArray) if (ABPersonHasImageData(person)) ncount++;
@@ -44,7 +46,7 @@
 
 + (int) contactsWithoutImageCount
 {
-	ABAddressBookRef addressBook = ABAddressBookCreate();
+	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
 	NSArray *peopleArray = (NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
 	int ncount = 0;
 	for (id person in peopleArray) if (!ABPersonHasImageData(person)) ncount++;
@@ -55,7 +57,7 @@
 // Groups
 + (int) numberOfGroups
 {
-	ABAddressBookRef addressBook = ABAddressBookCreate();
+	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
 	NSArray *groups = (NSArray *)ABAddressBookCopyArrayOfAllGroups(addressBook);
 	int ncount = groups.count;
 	[groups release];
@@ -64,7 +66,7 @@
 
 + (NSArray *) groups
 {
-	ABAddressBookRef addressBook = ABAddressBookCreate();
+	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
 	NSArray *groups = (NSArray *)ABAddressBookCopyArrayOfAllGroups(addressBook);
 	NSMutableArray *array = [NSMutableArray arrayWithCapacity:groups.count];
 	for (id group in groups)
@@ -84,14 +86,14 @@
 // Thanks to Eridius for suggestions re: error
 + (BOOL) addContact: (ABContact *) aContact withError: (NSError **) error
 {
-	ABAddressBookRef addressBook = ABAddressBookCreate();
+	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
 	if (!ABAddressBookAddRecord(addressBook, aContact.record, (CFErrorRef *) error)) return NO;
 	return ABAddressBookSave(addressBook, (CFErrorRef *) error);
 }
 
 + (BOOL) addGroup: (ABGroup *) aGroup withError: (NSError **) error
 {
-	ABAddressBookRef addressBook = ABAddressBookCreate();
+	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
 	if (!ABAddressBookAddRecord(addressBook, aGroup.record, (CFErrorRef *) error)) return NO;
 	return ABAddressBookSave(addressBook, (CFErrorRef *) error);
 }

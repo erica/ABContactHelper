@@ -60,6 +60,9 @@
 @property (nonatomic, readonly) NSString *contactName; // my friendly utility
 @property (nonatomic, readonly) NSString *compositeName; // via AB
 
+#pragma mark NUMBER
+@property (nonatomic, assign) NSNumber *kind;
+
 #pragma mark DATE
 @property (nonatomic, assign) NSDate *birthday;
 @property (nonatomic, readonly) NSDate *creationDate;
@@ -98,4 +101,16 @@
 #pragma mark IMAGES
 @property (nonatomic, assign) UIImage *image;
 
+#pragma mark REPRESENTATIONS
+
+// Conversion to dictionary
+- (NSDictionary *) baseDictionaryRepresentation; // no image
+- (NSDictionary *) dictionaryRepresentation; // image where available
+
+// Conversion to data
+- (NSData *) baseDataRepresentation; // no image
+- (NSData *) dataRepresentation; // image where available
+
++ (id) contactWithDictionary: (NSDictionary *) dict;
++ (id) contactWithData: (NSData *) data;
 @end

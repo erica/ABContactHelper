@@ -16,12 +16,10 @@
 	IBOutlet UITextView *textView;
 }
 @property (retain) NSMutableString *log;
-@property (retain) UITextView *textView;
 @end
 
 @implementation TestBedViewController
 @synthesize log;
-@synthesize textView;
 
 - (void) doLog: (NSString *) formatstring, ...
 {
@@ -32,7 +30,7 @@
 	va_end(arglist);
 	[self.log appendString:outstring];
 	[self.log appendString:@"\n"];
-	self.textView.text = self.log;
+	textView.text = self.log;
 }
 
 - (void) addGW
@@ -184,13 +182,37 @@
 	[ABContactsHelper addGroup:group withError:nil];
 }
 
+- (void) serialize
+{
+	NSArray *contacts = [ABContactsHelper contactsMatchingName:@"Washington" andName:@"George"];
+	printf("%d matching contacts found\n", contacts.count);
+	ABContact *peep = contacts.count ? [contacts lastObject] : [ABContact contact];	
+	if (!peep) return;
+	
+	NSDictionary *dict = [peep dictionaryRepresentation];
+	CFShow(dict);
+	
+	NSData *data = [peep dataRepresentation];
+	printf("%d bytes\n", data.length);
+	
+	ABContact *contact = [ABContact contactWithData:data];
+	CFShow([contact dataRepresentation]);
+}
+
 - (void) viewDidLoad
 {
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
+	
+	// BASIC TEST
 	// self.navigationItem.rightBarButtonItem = BARBUTTON(@"Add GW", @selector(addGW));
-	self.navigationItem.rightBarButtonItem = BARBUTTON(@"Groups", @selector(viewgroups));
 	// self.navigationItem.leftBarButtonItem = BARBUTTON(@"Scan", @selector(scan));
-	self.navigationItem.leftBarButtonItem = BARBUTTON(@"Add", @selector(addGroup));
+
+	// GROUPS TEST
+	// self.navigationItem.rightBarButtonItem = BARBUTTON(@"Groups", @selector(viewgroups));
+	// self.navigationItem.leftBarButtonItem = BARBUTTON(@"Add", @selector(addGroup));
+	
+	// SERIALIZATION TEST
+	self.navigationItem.rightBarButtonItem = BARBUTTON(@"Serialize", @selector(serialize));
 }
 @end
 
