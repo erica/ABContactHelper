@@ -196,7 +196,7 @@
 	printf("%d bytes\n", data.length);
 	
 	ABContact *contact = [ABContact contactWithData:data];
-	CFShow([contact dataRepresentation]);
+	CFShow([contact dictionaryRepresentation]);
 }
 
 - (void) viewDidLoad
