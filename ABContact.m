@@ -120,23 +120,23 @@
 		case kABPersonFirstNameProperty: return FIRST_NAME_STRING;
 		case kABPersonMiddleNameProperty: return MIDDLE_NAME_STRING;
 		case kABPersonLastNameProperty: return LAST_NAME_STRING;
-	 
+
 		case kABPersonPrefixProperty: return PREFIX_STRING;
 		case kABPersonSuffixProperty: return SUFFIX_STRING;
 		case kABPersonNicknameProperty: return NICKNAME_STRING;
-	
+
 		case kABPersonFirstNamePhoneticProperty: return PHONETIC_FIRST_STRING;
 		case kABPersonMiddleNamePhoneticProperty: return PHONETIC_MIDDLE_STRING;
 		case kABPersonLastNamePhoneticProperty: return PHONETIC_LAST_STRING;
-	 
+
 		case kABPersonOrganizationProperty: return ORGANIZATION_STRING;
 		case kABPersonJobTitleProperty: return JOBTITLE_STRING;
 		case kABPersonDepartmentProperty: return DEPARTMENT_STRING;
-	 
+
 		case kABPersonNoteProperty: return NOTE_STRING;
 
 		case kABPersonKindProperty: return KIND_STRING;
- 
+
 		case kABPersonBirthdayProperty: return BIRTHDAY_STRING;
 		case kABPersonCreationDateProperty: return CREATION_DATE_STRING;
 		case kABPersonModificationDateProperty: return MODIFICATION_DATE_STRING;
@@ -147,9 +147,9 @@
 		case kABPersonPhoneProperty: return PHONE_STRING;
 		case kABPersonInstantMessageProperty: return SMS_STRING;
 		case kABPersonURLProperty: return URL_STRING;
-		case kABPersonRelatedNamesProperty: return RELATED_STRING;			
+		case kABPersonRelatedNamesProperty: return RELATED_STRING;
 	} */
-	
+
 	if (aProperty == kABPersonFirstNameProperty) return FIRST_NAME_STRING;
 	if (aProperty == kABPersonMiddleNameProperty) return MIDDLE_NAME_STRING;
 	if (aProperty == kABPersonLastNameProperty) return LAST_NAME_STRING;
@@ -165,7 +165,7 @@
 	if (aProperty == kABPersonOrganizationProperty) return ORGANIZATION_STRING;
 	if (aProperty == kABPersonJobTitleProperty) return JOBTITLE_STRING;
 	if (aProperty == kABPersonDepartmentProperty) return DEPARTMENT_STRING;
-	
+
 	if (aProperty == kABPersonNoteProperty) return NOTE_STRING;
 
 	if (aProperty == kABPersonKindProperty) return KIND_STRING;
@@ -204,13 +204,13 @@
 	if (aProperty == kABPersonDepartmentProperty) return NO;
 
 	if (aProperty == kABPersonNoteProperty) return NO;
-	
+
 	if (aProperty == kABPersonKindProperty) return NO;
 
 	if (aProperty == kABPersonBirthdayProperty) return NO;
 	if (aProperty == kABPersonCreationDateProperty) return NO;
 	if (aProperty == kABPersonModificationDateProperty) return NO;
-	
+
 	return YES;
 	/*
 	if (aProperty == kABPersonEmailProperty) return YES;
@@ -306,20 +306,20 @@
 - (NSString *) contactName
 {
 	NSMutableString *string = [NSMutableString string];
-	
+
 	if (self.firstname || self.lastname)
 	{
 		if (self.prefix) [string appendFormat:@"%@ ", self.prefix];
 		if (self.firstname) [string appendFormat:@"%@ ", self.firstname];
 		if (self.nickname) [string appendFormat:@"\"%@\" ", self.nickname];
 		if (self.lastname) [string appendFormat:@"%@", self.lastname];
-		
+
 		if (self.suffix && string.length)
 			[string appendFormat:@", %@ ", self.suffix];
 		else
 			[string appendFormat:@" "];
 	}
-	
+
 	if (self.organization) [string appendString:self.organization];
 	return [string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
@@ -363,7 +363,7 @@
 	NSMutableArray *labels = [NSMutableArray array];
 	for (int i = 0; i < ABMultiValueGetCount(theProperty); i++)
 	{
-		NSString *label = (NSString *)ABMultiValueCopyLabelAtIndex(theProperty, i);
+		NSString *label = (NSString *)ABAddressBookCopyLocalizedLabel(ABMultiValueCopyLabelAtIndex(theProperty, i));
 		[labels addObject:label];
 		[label release];
 	}
@@ -394,7 +394,7 @@
 {
 	NSArray *valueArray = [self arrayForProperty:aProperty];
 	NSArray *labelArray = [self labelsForProperty:aProperty];
-	
+
 	int num = MIN(valueArray.count, labelArray.count);
 	NSMutableArray *items = [NSMutableArray array];
 	for (int i = 0; i < num; i++)
@@ -509,7 +509,7 @@
 	ABMutableMultiValueRef multi = ABMultiValueCreateMutable(aType);
 	for (NSDictionary *dict in anArray)
 		ABMultiValueAddValueAndLabel(multi, (CFTypeRef) [dict objectForKey:@"value"], (CFTypeRef) [dict objectForKey:@"label"], NULL);
-	
+
 	return CFAutorelease(multi);
 }
 
@@ -544,9 +544,9 @@
 - (void) setRelatedNameDictionaries: (NSArray *) dictionaries
 {
 	// kABWorkLabel, kABHomeLabel, kABOtherLabel
-	// kABPersonMotherLabel, kABPersonFatherLabel, kABPersonParentLabel, 
-	// kABPersonSisterLabel, kABPersonBrotherLabel, kABPersonChildLabel, 
-	// kABPersonFriendLabel, kABPersonSpouseLabel, kABPersonPartnerLabel, 
+	// kABPersonMotherLabel, kABPersonFatherLabel, kABPersonParentLabel,
+	// kABPersonSisterLabel, kABPersonBrotherLabel, kABPersonChildLabel,
+	// kABPersonFriendLabel, kABPersonSpouseLabel, kABPersonPartnerLabel,
 	// kABPersonManagerLabel, kABPersonAssistantLabel
 	ABMutableMultiValueRef multi = [self createMultiValueFromArray:dictionaries withType:kABMultiStringPropertyType];
 	[self setMulti:multi forProperty:kABPersonRelatedNamesProperty];
@@ -573,11 +573,11 @@
 
 - (void) setSmsDictionaries: (NSArray *) dictionaries
 {
-	// kABWorkLabel, kABHomeLabel, kABOtherLabel, 
+	// kABWorkLabel, kABHomeLabel, kABOtherLabel,
 	// kABPersonInstantMessageServiceKey, kABPersonInstantMessageUsernameKey
 	// kABPersonInstantMessageServiceYahoo, kABPersonInstantMessageServiceJabber
 	// kABPersonInstantMessageServiceMSN, kABPersonInstantMessageServiceICQ
-	// kABPersonInstantMessageServiceAIM, 
+	// kABPersonInstantMessageServiceAIM,
 	ABMutableMultiValueRef multi = [self createMultiValueFromArray:dictionaries withType:kABMultiDictionaryPropertyType];
 	[self setMulti:multi forProperty:kABPersonInstantMessageProperty];
 	// CFRelease(multi);
@@ -597,7 +597,7 @@
 {
 	CFErrorRef error;
 	BOOL success;
-	
+
 	if (image == nil) // remove
 	{
 		if (!ABPersonHasImageData(record)) return; // no image to remove
@@ -605,7 +605,7 @@
 		if (!success) NSLog(@"Error: %@", [(NSError *)error localizedDescription]);
 		return;
 	}
-	
+
 	NSData *data = UIImagePNGRepresentation(image);
 	success = ABPersonSetImageData(record, (CFDataRef) data, &error);
 	if (!success) NSLog(@"Error: %@", [(NSError *)error localizedDescription]);
@@ -624,15 +624,15 @@
 	if (self.prefix) [dict setObject:self.prefix forKey:PREFIX_STRING];
 	if (self.suffix) [dict setObject:self.suffix forKey:SUFFIX_STRING];
 	if (self.nickname) [dict setObject:self.nickname forKey:NICKNAME_STRING];
-	
+
 	if (self.firstnamephonetic) [dict setObject:self.firstnamephonetic forKey:PHONETIC_FIRST_STRING];
 	if (self.middlenamephonetic) [dict setObject:self.middlenamephonetic forKey:PHONETIC_MIDDLE_STRING];
 	if (self.lastnamephonetic) [dict setObject:self.lastnamephonetic forKey:PHONETIC_LAST_STRING];
-	
+
 	if (self.organization) [dict setObject:self.organization forKey:ORGANIZATION_STRING];
 	if (self.jobtitle) [dict setObject:self.jobtitle forKey:JOBTITLE_STRING];
 	if (self.department) [dict setObject:self.department forKey:DEPARTMENT_STRING];
-	
+
 	if (self.note) [dict setObject:self.note forKey:NOTE_STRING];
 
 	if (self.kind) [dict setObject:self.kind forKey:KIND_STRING];
@@ -648,7 +648,7 @@
 	[dict setObject:self.smsDictionaries forKey:SMS_STRING];
 	[dict setObject:self.urlDictionaries forKey:URL_STRING];
 	[dict setObject:self.relatedNameDictionaries forKey:RELATED_STRING];
-	
+
 	return dict;
 }
 
@@ -656,7 +656,7 @@
 - (NSDictionary *) dictionaryRepresentation
 {
 	NSMutableDictionary *dict = [[[self baseDictionaryRepresentation] mutableCopy] autorelease];
-	if (ABPersonHasImageData(record)) 
+	if (ABPersonHasImageData(record))
 	{
 		CFDataRef imageData = ABPersonCopyImageData(record);
 		[dict setObject:(NSData *)imageData forKey:IMAGE_STRING];
@@ -672,7 +672,7 @@
 	NSDictionary *dict = [self baseDictionaryRepresentation];
 	NSData *data = [NSPropertyListSerialization dataFromPropertyList:dict format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorString];
 	if (!data) CFShow(errorString);
-	return data; 
+	return data;
 }
 
 
@@ -692,21 +692,21 @@
 	if ([dict objectForKey:FIRST_NAME_STRING]) contact.firstname = [dict objectForKey:FIRST_NAME_STRING];
 	if ([dict objectForKey:MIDDLE_NAME_STRING]) contact.middlename = [dict objectForKey:MIDDLE_NAME_STRING];
 	if ([dict objectForKey:LAST_NAME_STRING]) contact.lastname = [dict objectForKey:LAST_NAME_STRING];
-	
+
 	if ([dict objectForKey:PREFIX_STRING]) contact.prefix = [dict objectForKey:PREFIX_STRING];
 	if ([dict objectForKey:SUFFIX_STRING]) contact.suffix = [dict objectForKey:SUFFIX_STRING];
 	if ([dict objectForKey:NICKNAME_STRING]) contact.nickname = [dict objectForKey:NICKNAME_STRING];
-	
+
 	if ([dict objectForKey:PHONETIC_FIRST_STRING]) contact.firstnamephonetic = [dict objectForKey:PHONETIC_FIRST_STRING];
 	if ([dict objectForKey:PHONETIC_MIDDLE_STRING]) contact.middlenamephonetic = [dict objectForKey:PHONETIC_MIDDLE_STRING];
 	if ([dict objectForKey:PHONETIC_LAST_STRING]) contact.lastnamephonetic = [dict objectForKey:PHONETIC_LAST_STRING];
-	
+
 	if ([dict objectForKey:ORGANIZATION_STRING]) contact.organization = [dict objectForKey:ORGANIZATION_STRING];
 	if ([dict objectForKey:JOBTITLE_STRING]) contact.jobtitle = [dict objectForKey:JOBTITLE_STRING];
 	if ([dict objectForKey:DEPARTMENT_STRING]) contact.department = [dict objectForKey:DEPARTMENT_STRING];
-	
+
 	if ([dict objectForKey:NOTE_STRING]) contact.note = [dict objectForKey:NOTE_STRING];
-	
+
 	if ([dict objectForKey:KIND_STRING]) contact.kind = [dict objectForKey:KIND_STRING];
 
 	if ([dict objectForKey:EMAIL_STRING]) contact.emailDictionaries = [dict objectForKey:EMAIL_STRING];
@@ -717,7 +717,7 @@
 	if ([dict objectForKey:URL_STRING]) contact.urlDictionaries = [dict objectForKey:URL_STRING];
 	if ([dict objectForKey:RELATED_STRING]) contact.relatedNameDictionaries = [dict objectForKey:RELATED_STRING];
 
-	if ([dict objectForKey:IMAGE_STRING]) 
+	if ([dict objectForKey:IMAGE_STRING])
 	{
 		CFErrorRef error;
  		BOOL success = ABPersonSetImageData(contact.record, (CFDataRef) [dict objectForKey:IMAGE_STRING], &error);
@@ -732,15 +732,15 @@
 	// Otherwise handle points
 	CFStringRef errorString;
 	CFPropertyListRef plist = CFPropertyListCreateFromXMLData(kCFAllocatorDefault, (CFDataRef)data, kCFPropertyListMutableContainers, &errorString);
-	if (!plist) 
+	if (!plist)
 	{
 		CFShow(errorString);
 		return nil;
 	}
-	
+
 	NSDictionary *dict = (NSDictionary *) plist;
 	[dict autorelease];
-	
+
 	return [self contactWithDictionary:dict];
 }
 @end
