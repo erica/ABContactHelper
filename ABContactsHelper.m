@@ -117,6 +117,14 @@
 	return contacts;
 }
 
++ (NSArray *) contactsMatchingOrganization: (NSString *) organization
+{
+    NSPredicate *pred;
+    NSArray *contacts = [ABContactsHelper contacts];
+    pred = [NSPredicate predicateWithFormat:@"organization contains[cd] %@", organization];
+    return [contacts filteredArrayUsingPredicate:pred];
+}
+
 + (NSArray *) contactsMatchingPhone: (NSString *) number
 {
 	NSPredicate *pred;

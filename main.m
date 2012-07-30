@@ -36,7 +36,8 @@
 - (void) addGW
 {
 	// Search for a contact, creating a new one if one is not found
-	NSArray *contacts = [ABContactsHelper contactsMatchingName:@"Washington" andName:@"George"];
+//	NSArray *contacts = [ABContactsHelper contactsMatchingName:@"Washington" andName:@"George"];
+    NSArray *contacts = [ABContactsHelper contactsMatchingOrganization:@"FAKE ORG"];
 	printf("%d matching contacts found\n", contacts.count);
 	ABContact *peep = contacts.count ? [contacts lastObject] : [ABContact contact];
 	
@@ -60,6 +61,7 @@
 	peep.firstnamephonetic = @"Horhay";
 	peep.lastnamephonetic = @"Warsh-ing-town";
 	peep.jobtitle = @"President of the United States of America";
+    peep.organization = @"FAKE ORG";
 	
 	// Emails
 	NSMutableArray *emailarray = [NSMutableArray array];
@@ -204,27 +206,42 @@
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
 	
 	// BASIC TEST
-	// self.navigationItem.rightBarButtonItem = BARBUTTON(@"Add GW", @selector(addGW));
-	// self.navigationItem.leftBarButtonItem = BARBUTTON(@"Scan", @selector(scan));
+	self.navigationItem.rightBarButtonItem = BARBUTTON(@"Add GW", @selector(addGW));
+	self.navigationItem.leftBarButtonItem = BARBUTTON(@"Scan", @selector(scan));
 
 	// GROUPS TEST
-	// self.navigationItem.rightBarButtonItem = BARBUTTON(@"Groups", @selector(viewgroups));
-	// self.navigationItem.leftBarButtonItem = BARBUTTON(@"Add", @selector(addGroup));
+//	self.navigationItem.rightBarButtonItem = BARBUTTON(@"Groups", @selector(viewgroups));
+//	self.navigationItem.leftBarButtonItem = BARBUTTON(@"Add", @selector(addGroup));
 	
 	// SERIALIZATION TEST
-	self.navigationItem.rightBarButtonItem = BARBUTTON(@"Serialize", @selector(serialize));
+//	self.navigationItem.rightBarButtonItem = BARBUTTON(@"Serialize", @selector(serialize));
 }
 @end
 
 @interface TestBedAppDelegate : NSObject <UIApplicationDelegate>
+{
+    UIWindow *_window;
+    UINavigationController *_nav;
+}
+@property (nonatomic, retain) UINavigationController *nav;
+@property (nonatomic, retain) UIWindow *window;
 @end
 
 @implementation TestBedAppDelegate
+@synthesize nav = _nav;
+@synthesize window = _window;
 - (void)applicationDidFinishLaunching:(UIApplication *)application {	
 	UIWindow *window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-	UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:[[TestBedViewController alloc] init]];
-	[window addSubview:nav.view];
-	[window makeKeyAndVisible];
+    self.window = window;
+    TestBedViewController *testBedViewController = [[TestBedViewController alloc] init];
+	UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:testBedViewController];
+    self.nav = nav;
+	[self.window addSubview:self.nav.view];
+	[self.window makeKeyAndVisible];
+    // clean up memory
+    [nav release];
+    [window release];
+    [testBedViewController release];
 }
 @end
 
