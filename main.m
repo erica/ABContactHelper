@@ -36,7 +36,8 @@
 - (void) addGW
 {
 	// Search for a contact, creating a new one if one is not found
-	NSArray *contacts = [ABContactsHelper contactsMatchingName:@"Washington" andName:@"George"];
+//	NSArray *contacts = [ABContactsHelper contactsMatchingName:@"Washington" andName:@"George"];
+    NSArray *contacts = [ABContactsHelper contactsMatchingOrganization:@"FAKE ORG"];
 	printf("%d matching contacts found\n", contacts.count);
 	ABContact *peep = contacts.count ? [contacts lastObject] : [ABContact contact];
 	
@@ -60,6 +61,7 @@
 	peep.firstnamephonetic = @"Horhay";
 	peep.lastnamephonetic = @"Warsh-ing-town";
 	peep.jobtitle = @"President of the United States of America";
+    peep.organization = @"FAKE ORG";
 	
 	// Emails
 	NSMutableArray *emailarray = [NSMutableArray array];
@@ -204,15 +206,15 @@
 	self.navigationController.navigationBar.tintColor = COOKBOOK_PURPLE_COLOR;
 	
 	// BASIC TEST
-//	self.navigationItem.rightBarButtonItem = BARBUTTON(@"Add GW", @selector(addGW));
-//	self.navigationItem.leftBarButtonItem = BARBUTTON(@"Scan", @selector(scan));
+	self.navigationItem.rightBarButtonItem = BARBUTTON(@"Add GW", @selector(addGW));
+	self.navigationItem.leftBarButtonItem = BARBUTTON(@"Scan", @selector(scan));
 
 	// GROUPS TEST
 //	self.navigationItem.rightBarButtonItem = BARBUTTON(@"Groups", @selector(viewgroups));
 //	self.navigationItem.leftBarButtonItem = BARBUTTON(@"Add", @selector(addGroup));
 	
 	// SERIALIZATION TEST
-	self.navigationItem.rightBarButtonItem = BARBUTTON(@"Serialize", @selector(serialize));
+//	self.navigationItem.rightBarButtonItem = BARBUTTON(@"Serialize", @selector(serialize));
 }
 @end
 
