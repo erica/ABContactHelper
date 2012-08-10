@@ -9,17 +9,33 @@
 #define CFAutorelease(obj) ({CFTypeRef _obj = (obj); (_obj == NULL) ? NULL : [(id)CFMakeCollectable(_obj) autorelease]; })
 
 @implementation ABContactsHelper
+@synthesize addressBook;
+// Thanks to Quentarez, Ciaran
+- (id) init{
+	if ([super init]==nil)
+    return nil;
+  self.addressBook = ABAddressBookCreate();
+	return self;
+}
+- (void)dealloc{
+  CFRelease(self.addressBook);
+  [super dealloc];
+}
+- (BOOL)save{
+  NSError *error;
+  return ABAddressBookSave(addressBook, (CFErrorRef *) error);
+}
 /*
  Note: You cannot CFRelease the addressbook after CFAutorelease(ABAddressBookCreate());
  */
-+ (ABAddressBookRef) addressBook
-{
-	return CFAutorelease(ABAddressBookCreate());
-}
+//+ (ABAddressBookRef) addressBook
+//{
+//	return CFAutorelease(ABAddressBookCreate());
+//}
 
-+ (NSArray *) contacts
+- (NSArray *) contacts
 {
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
+	//ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
 	NSArray *thePeople = (NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
 	NSMutableArray *array = [NSMutableArray arrayWithCapacity:thePeople.count];
 	for (id person in thePeople)
@@ -28,15 +44,15 @@
 	return array;
 }
 
-+ (int) contactsCount
+- (int) contactsCount
 {
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
+	//ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
 	return ABAddressBookGetPersonCount(addressBook);
 }
 
-+ (int) contactsWithImageCount
+- (int) contactsWithImageCount
 {
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
+	//ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
 	NSArray *peopleArray = (NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
 	int ncount = 0;
 	for (id person in peopleArray) if (ABPersonHasImageData(person)) ncount++;
@@ -44,9 +60,9 @@
 	return ncount;
 }
 
-+ (int) contactsWithoutImageCount
+- (int) contactsWithoutImageCount
 {
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
+	//ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
 	NSArray *peopleArray = (NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
 	int ncount = 0;
 	for (id person in peopleArray) if (!ABPersonHasImageData(person)) ncount++;
@@ -55,18 +71,17 @@
 }
 
 // Groups
-+ (int) numberOfGroups
-{
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
+- (int) numberOfGroups{
+	//ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
 	NSArray *groups = (NSArray *)ABAddressBookCopyArrayOfAllGroups(addressBook);
 	int ncount = groups.count;
 	[groups release];
 	return ncount;
 }
 
-+ (NSArray *) groups
+- (NSArray *) groups
 {
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
+	//ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
 	NSArray *groups = (NSArray *)ABAddressBookCopyArrayOfAllGroups(addressBook);
 	NSMutableArray *array = [NSMutableArray arrayWithCapacity:groups.count];
 	for (id group in groups)
@@ -76,7 +91,7 @@
 }
 
 // Sorting
-+ (BOOL) firstNameSorting
+- (BOOL) firstNameSorting
 {
 	return (ABPersonGetCompositeNameFormat() == kABPersonCompositeNameFormatFirstNameFirst);
 }
@@ -84,32 +99,32 @@
 #pragma mark Contact Management
 
 // Thanks to Eridius for suggestions re: error
-+ (BOOL) addContact: (ABContact *) aContact withError: (NSError **) error
+- (BOOL) addContact: (ABContact *) aContact withError: (NSError **) error
 {
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
+	//ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
 	if (!ABAddressBookAddRecord(addressBook, aContact.record, (CFErrorRef *) error)) return NO;
 	return ABAddressBookSave(addressBook, (CFErrorRef *) error);
 }
 
-+ (BOOL) addGroup: (ABGroup *) aGroup withError: (NSError **) error
+- (BOOL) addGroup: (ABGroup *) aGroup withError: (NSError **) error
 {
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
+	//ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
 	if (!ABAddressBookAddRecord(addressBook, aGroup.record, (CFErrorRef *) error)) return NO;
 	return ABAddressBookSave(addressBook, (CFErrorRef *) error);
 }
 
-+ (NSArray *) contactsMatchingName: (NSString *) fname
+- (NSArray *) contactsMatchingName: (NSString *) fname
 {
 	NSPredicate *pred;
-	NSArray *contacts = [ABContactsHelper contacts];
+	NSArray *contacts = [self contacts];
 	pred = [NSPredicate predicateWithFormat:@"firstname contains[cd] %@ OR lastname contains[cd] %@ OR nickname contains[cd] %@ OR middlename contains[cd] %@", fname, fname, fname, fname];
 	return [contacts filteredArrayUsingPredicate:pred];
 }
 
-+ (NSArray *) contactsMatchingName: (NSString *) fname andName: (NSString *) lname
+- (NSArray *) contactsMatchingName: (NSString *) fname andName: (NSString *) lname
 {
 	NSPredicate *pred;
-	NSArray *contacts = [ABContactsHelper contacts];
+	NSArray *contacts = [self contacts];
 	pred = [NSPredicate predicateWithFormat:@"firstname contains[cd] %@ OR lastname contains[cd] %@ OR nickname contains[cd] %@ OR middlename contains[cd] %@", fname, fname, fname, fname];
 	contacts = [contacts filteredArrayUsingPredicate:pred];
 	pred = [NSPredicate predicateWithFormat:@"firstname contains[cd] %@ OR lastname contains[cd] %@ OR nickname contains[cd] %@ OR middlename contains[cd] %@", lname, lname, lname, lname];
@@ -117,18 +132,18 @@
 	return contacts;
 }
 
-+ (NSArray *) contactsMatchingPhone: (NSString *) number
+- (NSArray *) contactsMatchingPhone: (NSString *) number
 {
 	NSPredicate *pred;
-	NSArray *contacts = [ABContactsHelper contacts];
+	NSArray *contacts = [self contacts];
 	pred = [NSPredicate predicateWithFormat:@"phonenumbers contains[cd] %@", number];
 	return [contacts filteredArrayUsingPredicate:pred];
 }
 
-+ (NSArray *) groupsMatchingName: (NSString *) fname
+- (NSArray *) groupsMatchingName: (NSString *) fname
 {
 	NSPredicate *pred;
-	NSArray *groups = [ABContactsHelper groups];
+	NSArray *groups = [self groups];
 	pred = [NSPredicate predicateWithFormat:@"name contains[cd] %@ ", fname];
 	return [groups filteredArrayUsingPredicate:pred];
 }
