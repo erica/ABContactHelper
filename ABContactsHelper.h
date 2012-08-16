@@ -12,6 +12,9 @@
 
 @interface ABContactsHelper : NSObject
 @property (nonatomic,assign) ABAddressBookRef addressBook;
++ (ABContactsHelper *)helper;
++ (ABContactsHelper *)helperWithAddressBook:(ABAddressBookRef)book;
+
 //save the address book
 - (BOOL) save;
 // Address Book

@@ -113,4 +113,6 @@
 
 + (id) contactWithDictionary: (NSDictionary *) dict;
 + (id) contactWithData: (NSData *) data;
+- (NSString *) getFirstMainPhone;
+- (NSString *) getFirstMobile;
 @end

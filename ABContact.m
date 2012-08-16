@@ -58,10 +58,12 @@
 	return [[[ABContact alloc] initWithRecord:person] autorelease];
 }
 
-+ (id) contactWithRecordID: (ABRecordID) recordID
-{
++ (id) contactWithRecordID: (ABRecordID) recordID{
 	ABAddressBookRef addressBook = ABAddressBookCreate();
 	ABRecordRef contactrec = ABAddressBookGetPersonWithRecordID(addressBook, recordID);
+  if(contactrec == NULL){
+    return nil;
+  }
 	ABContact *contact = [self contactWithRecord:contactrec];
 	// CFRelease(contactrec); // Thanks Gary Fung
 	return contact;
@@ -743,4 +745,29 @@
 	
 	return [self contactWithDictionary:dict];
 }
+- (NSString *) getFirstMainPhone{
+  NSArray *arr0 = self.phoneArray;
+  NSArray *arr1 = self.phoneLabels;
+  NSInteger ix=0;
+  for(NSString *label in arr1){
+    if([label compare:(NSString *)kABPersonPhoneMainLabel]==NSOrderedSame){
+      return [arr0 objectAtIndex:ix];
+    }
+    ix++;
+  }
+  return nil;
+}
+- (NSString *) getFirstMobile{
+  NSArray *arr0 = self.phoneArray;
+  NSArray *arr1 = self.phoneLabels;
+  NSInteger ix=0;
+  for(NSString *label in arr1){
+    if([label compare:(NSString *)kABPersonPhoneMobileLabel]==NSOrderedSame){
+      return [arr0 objectAtIndex:ix];
+    }
+    ix++;
+  }
+  return nil;
+}
+
 @end

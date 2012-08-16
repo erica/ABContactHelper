@@ -10,21 +10,28 @@
 
 @implementation ABContactsHelper
 @synthesize addressBook;
-// Thanks to Quentarez, Ciaran
-- (id) init{
-	if ([super init]==nil)
-    return nil;
-  self.addressBook = ABAddressBookCreate();
-	return self;
-}
+
 - (void)dealloc{
-  CFRelease(self.addressBook);
+  if(self.addressBook)
+    CFRelease(self.addressBook);
   [super dealloc];
 }
 - (BOOL)save{
   NSError *error;
   return ABAddressBookSave(addressBook, (CFErrorRef *) error);
 }
++ (ABContactsHelper *)helper{
+  ABContactsHelper *helper = [[ABContactsHelper alloc] init];
+  helper.addressBook = ABAddressBookCreate();
+  return helper;
+}
+
++ (ABContactsHelper *)helperWithAddressBook:(ABAddressBookRef)book{
+  ABContactsHelper *helper = [[ABContactsHelper alloc] init];
+  helper.addressBook = book;
+  return helper;
+}
+
 /*
  Note: You cannot CFRelease the addressbook after CFAutorelease(ABAddressBookCreate());
  */
@@ -103,7 +110,8 @@
 {
 	//ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
 	if (!ABAddressBookAddRecord(addressBook, aContact.record, (CFErrorRef *) error)) return NO;
-	return ABAddressBookSave(addressBook, (CFErrorRef *) error);
+	//return ABAddressBookSave(addressBook, (CFErrorRef *) error);
+  return YES;
 }
 
 - (BOOL) addGroup: (ABGroup *) aGroup withError: (NSError **) error
@@ -111,6 +119,7 @@
 	//ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
 	if (!ABAddressBookAddRecord(addressBook, aGroup.record, (CFErrorRef *) error)) return NO;
 	return ABAddressBookSave(addressBook, (CFErrorRef *) error);
+  //return YES;
 }
 
 - (NSArray *) contactsMatchingName: (NSString *) fname
