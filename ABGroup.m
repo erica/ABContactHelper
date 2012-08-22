@@ -24,9 +24,9 @@
 	return [[[ABGroup alloc] initWithRecord:grouprec] autorelease];
 }
 
-+ (id) groupWithRecordID: (ABRecordID) recordID
-{
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
++ (id) groupWithRecordID: (ABRecordID) recordID{
+  CFErrorRef error;
+	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreateWithOptions(nil, &error));
 	ABRecordRef grouprec = ABAddressBookGetGroupWithRecordID(addressBook, recordID);
 	ABGroup *group = [self groupWithRecord:grouprec];
 	CFRelease(grouprec);
@@ -48,9 +48,8 @@
 	[super dealloc];
 }
 
-- (BOOL) removeSelfFromAddressBook: (NSError **) error
-{
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
+- (BOOL) removeSelfFromAddressBook: (NSError **) error{
+	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreateWithOptions(nil, (CFErrorRef *)error));
 	if (!ABAddressBookRemoveRecord(addressBook, self.record, (CFErrorRef *) error)) return NO;
 	return ABAddressBookSave(addressBook,  (CFErrorRef *) error);
 }

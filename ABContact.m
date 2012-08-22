@@ -58,10 +58,13 @@
 	return [[[ABContact alloc] initWithRecord:person] autorelease];
 }
 
-+ (id) contactWithRecordID: (ABRecordID) recordID
-{
-	ABAddressBookRef addressBook = ABAddressBookCreate();
++ (id) contactWithRecordID: (ABRecordID) recordID{
+  CFErrorRef error=NULL;
+	ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(nil, &error);
 	ABRecordRef contactrec = ABAddressBookGetPersonWithRecordID(addressBook, recordID);
+  if(contactrec == NULL){
+    return nil;
+  }
 	ABContact *contact = [self contactWithRecord:contactrec];
 	// CFRelease(contactrec); // Thanks Gary Fung
 	return contact;
@@ -268,9 +271,8 @@
 }
 
 // Thanks to Eridius for suggestions re: error
-- (BOOL) removeSelfFromAddressBook: (NSError **) error
-{
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
+- (BOOL) removeSelfFromAddressBook: (NSError **) error{
+	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreateWithOptions(nil, (CFErrorRef *) error));
 	if (!ABAddressBookRemoveRecord(addressBook, self.record, (CFErrorRef *) error)) return NO;
 	return ABAddressBookSave(addressBook,  (CFErrorRef *) error);
 }
@@ -743,4 +745,29 @@
 	
 	return [self contactWithDictionary:dict];
 }
+- (NSString *) getFirstMainPhone{
+  NSArray *arr0 = self.phoneArray;
+  NSArray *arr1 = self.phoneLabels;
+  NSInteger ix=0;
+  for(NSString *label in arr1){
+    if([label compare:(NSString *)kABPersonPhoneMainLabel]==NSOrderedSame){
+      return [arr0 objectAtIndex:ix];
+    }
+    ix++;
+  }
+  return nil;
+}
+- (NSString *) getFirstMobile{
+  NSArray *arr0 = self.phoneArray;
+  NSArray *arr1 = self.phoneLabels;
+  NSInteger ix=0;
+  for(NSString *label in arr1){
+    if([label compare:(NSString *)kABPersonPhoneMobileLabel]==NSOrderedSame){
+      return [arr0 objectAtIndex:ix];
+    }
+    ix++;
+  }
+  return nil;
+}
+
 @end
