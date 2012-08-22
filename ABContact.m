@@ -59,7 +59,8 @@
 }
 
 + (id) contactWithRecordID: (ABRecordID) recordID{
-	ABAddressBookRef addressBook = ABAddressBookCreate();
+  CFErrorRef error=NULL;
+	ABAddressBookRef addressBook = ABAddressBookCreateWithOptions(nil, &error);
 	ABRecordRef contactrec = ABAddressBookGetPersonWithRecordID(addressBook, recordID);
   if(contactrec == NULL){
     return nil;
@@ -270,9 +271,8 @@
 }
 
 // Thanks to Eridius for suggestions re: error
-- (BOOL) removeSelfFromAddressBook: (NSError **) error
-{
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
+- (BOOL) removeSelfFromAddressBook: (NSError **) error{
+	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreateWithOptions(nil, (CFErrorRef *) error));
 	if (!ABAddressBookRemoveRecord(addressBook, self.record, (CFErrorRef *) error)) return NO;
 	return ABAddressBookSave(addressBook,  (CFErrorRef *) error);
 }

@@ -22,7 +22,8 @@
 }
 + (ABContactsHelper *)helper{
   ABContactsHelper *helper = [[ABContactsHelper alloc] init];
-  helper.addressBook = ABAddressBookCreate();
+  CFErrorRef error=NULL;
+	helper.addressBook = ABAddressBookCreateWithOptions(nil, &error);
   return helper;
 }
 
