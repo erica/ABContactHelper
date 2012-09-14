@@ -6,6 +6,7 @@
 
 #import "ABContact.h"
 #import "ABContactsHelper.h"
+#import "NSString+Helpers.h" //R&P Addition
 
 #define CFAutorelease(obj) ({CFTypeRef _obj = (obj); (_obj == NULL) ? NULL : [(id)CFMakeCollectable(_obj) autorelease]; })
 
@@ -116,64 +117,64 @@
 + (NSString *) propertyString: (ABPropertyID) aProperty
 {
 	/* switch (aProperty) // Sorry, this won't compile
-	{
-		case kABPersonFirstNameProperty: return FIRST_NAME_STRING;
-		case kABPersonMiddleNameProperty: return MIDDLE_NAME_STRING;
-		case kABPersonLastNameProperty: return LAST_NAME_STRING;
+     {
+     case kABPersonFirstNameProperty: return FIRST_NAME_STRING;
+     case kABPersonMiddleNameProperty: return MIDDLE_NAME_STRING;
+     case kABPersonLastNameProperty: return LAST_NAME_STRING;
 	 
-		case kABPersonPrefixProperty: return PREFIX_STRING;
-		case kABPersonSuffixProperty: return SUFFIX_STRING;
-		case kABPersonNicknameProperty: return NICKNAME_STRING;
-	
-		case kABPersonFirstNamePhoneticProperty: return PHONETIC_FIRST_STRING;
-		case kABPersonMiddleNamePhoneticProperty: return PHONETIC_MIDDLE_STRING;
-		case kABPersonLastNamePhoneticProperty: return PHONETIC_LAST_STRING;
+     case kABPersonPrefixProperty: return PREFIX_STRING;
+     case kABPersonSuffixProperty: return SUFFIX_STRING;
+     case kABPersonNicknameProperty: return NICKNAME_STRING;
+     
+     case kABPersonFirstNamePhoneticProperty: return PHONETIC_FIRST_STRING;
+     case kABPersonMiddleNamePhoneticProperty: return PHONETIC_MIDDLE_STRING;
+     case kABPersonLastNamePhoneticProperty: return PHONETIC_LAST_STRING;
 	 
-		case kABPersonOrganizationProperty: return ORGANIZATION_STRING;
-		case kABPersonJobTitleProperty: return JOBTITLE_STRING;
-		case kABPersonDepartmentProperty: return DEPARTMENT_STRING;
+     case kABPersonOrganizationProperty: return ORGANIZATION_STRING;
+     case kABPersonJobTitleProperty: return JOBTITLE_STRING;
+     case kABPersonDepartmentProperty: return DEPARTMENT_STRING;
 	 
-		case kABPersonNoteProperty: return NOTE_STRING;
-
-		case kABPersonKindProperty: return KIND_STRING;
- 
-		case kABPersonBirthdayProperty: return BIRTHDAY_STRING;
-		case kABPersonCreationDateProperty: return CREATION_DATE_STRING;
-		case kABPersonModificationDateProperty: return MODIFICATION_DATE_STRING;
-
-		case kABPersonEmailProperty: return EMAIL_STRING;
-		case kABPersonAddressProperty: return ADDRESS_STRING;
-		case kABPersonDateProperty: return DATE_STRING;
-		case kABPersonPhoneProperty: return PHONE_STRING;
-		case kABPersonInstantMessageProperty: return SMS_STRING;
-		case kABPersonURLProperty: return URL_STRING;
-		case kABPersonRelatedNamesProperty: return RELATED_STRING;			
-	} */
+     case kABPersonNoteProperty: return NOTE_STRING;
+     
+     case kABPersonKindProperty: return KIND_STRING;
+     
+     case kABPersonBirthdayProperty: return BIRTHDAY_STRING;
+     case kABPersonCreationDateProperty: return CREATION_DATE_STRING;
+     case kABPersonModificationDateProperty: return MODIFICATION_DATE_STRING;
+     
+     case kABPersonEmailProperty: return EMAIL_STRING;
+     case kABPersonAddressProperty: return ADDRESS_STRING;
+     case kABPersonDateProperty: return DATE_STRING;
+     case kABPersonPhoneProperty: return PHONE_STRING;
+     case kABPersonInstantMessageProperty: return SMS_STRING;
+     case kABPersonURLProperty: return URL_STRING;
+     case kABPersonRelatedNamesProperty: return RELATED_STRING;
+     } */
 	
 	if (aProperty == kABPersonFirstNameProperty) return FIRST_NAME_STRING;
 	if (aProperty == kABPersonMiddleNameProperty) return MIDDLE_NAME_STRING;
 	if (aProperty == kABPersonLastNameProperty) return LAST_NAME_STRING;
-
+    
 	if (aProperty == kABPersonPrefixProperty) return PREFIX_STRING;
 	if (aProperty == kABPersonSuffixProperty) return SUFFIX_STRING;
 	if (aProperty == kABPersonNicknameProperty) return NICKNAME_STRING;
-
+    
 	if (aProperty == kABPersonFirstNamePhoneticProperty) return PHONETIC_FIRST_STRING;
 	if (aProperty == kABPersonMiddleNamePhoneticProperty) return PHONETIC_MIDDLE_STRING;
 	if (aProperty == kABPersonLastNamePhoneticProperty) return PHONETIC_LAST_STRING;
-
+    
 	if (aProperty == kABPersonOrganizationProperty) return ORGANIZATION_STRING;
 	if (aProperty == kABPersonJobTitleProperty) return JOBTITLE_STRING;
 	if (aProperty == kABPersonDepartmentProperty) return DEPARTMENT_STRING;
 	
 	if (aProperty == kABPersonNoteProperty) return NOTE_STRING;
-
+    
 	if (aProperty == kABPersonKindProperty) return KIND_STRING;
-
+    
 	if (aProperty == kABPersonBirthdayProperty) return BIRTHDAY_STRING;
 	if (aProperty == kABPersonCreationDateProperty) return CREATION_DATE_STRING;
 	if (aProperty == kABPersonModificationDateProperty) return MODIFICATION_DATE_STRING;
-
+    
 	if (aProperty == kABPersonEmailProperty) return EMAIL_STRING;
 	if (aProperty == kABPersonAddressProperty) return ADDRESS_STRING;
 	if (aProperty == kABPersonDateProperty) return DATE_STRING;
@@ -181,7 +182,7 @@
 	if (aProperty == kABPersonInstantMessageProperty) return SMS_STRING;
 	if (aProperty == kABPersonURLProperty) return URL_STRING;
 	if (aProperty == kABPersonRelatedNamesProperty) return RELATED_STRING;
-
+    
 	return nil;
 }
 
@@ -190,36 +191,36 @@
 	if (aProperty == kABPersonFirstNameProperty) return NO;
 	if (aProperty == kABPersonMiddleNameProperty) return NO;
 	if (aProperty == kABPersonLastNameProperty) return NO;
-
+    
 	if (aProperty == kABPersonPrefixProperty) return NO;
 	if (aProperty == kABPersonSuffixProperty) return NO;
 	if (aProperty == kABPersonNicknameProperty) return NO;
-
+    
 	if (aProperty == kABPersonFirstNamePhoneticProperty) return NO;
 	if (aProperty == kABPersonMiddleNamePhoneticProperty) return NO;
 	if (aProperty == kABPersonLastNamePhoneticProperty) return NO;
-
+    
 	if (aProperty == kABPersonOrganizationProperty) return NO;
 	if (aProperty == kABPersonJobTitleProperty) return NO;
 	if (aProperty == kABPersonDepartmentProperty) return NO;
-
+    
 	if (aProperty == kABPersonNoteProperty) return NO;
 	
 	if (aProperty == kABPersonKindProperty) return NO;
-
+    
 	if (aProperty == kABPersonBirthdayProperty) return NO;
 	if (aProperty == kABPersonCreationDateProperty) return NO;
 	if (aProperty == kABPersonModificationDateProperty) return NO;
 	
 	return YES;
 	/*
-	if (aProperty == kABPersonEmailProperty) return YES;
-	if (aProperty == kABPersonAddressProperty) return YES;
-	if (aProperty == kABPersonDateProperty) return YES;
-	if (aProperty == kABPersonPhoneProperty) return YES;
-	if (aProperty == kABPersonInstantMessageProperty) return YES;
-	if (aProperty == kABPersonURLProperty) return YES;
-	if (aProperty == kABPersonRelatedNamesProperty) return YES;
+     if (aProperty == kABPersonEmailProperty) return YES;
+     if (aProperty == kABPersonAddressProperty) return YES;
+     if (aProperty == kABPersonDateProperty) return YES;
+     if (aProperty == kABPersonPhoneProperty) return YES;
+     if (aProperty == kABPersonInstantMessageProperty) return YES;
+     if (aProperty == kABPersonURLProperty) return YES;
+     if (aProperty == kABPersonRelatedNamesProperty) return YES;
 	 */
 }
 
@@ -374,6 +375,17 @@
 - (NSArray *) emailArray {return [self arrayForProperty:kABPersonEmailProperty];}
 - (NSArray *) emailLabels {return [self labelsForProperty:kABPersonEmailProperty];}
 - (NSArray *) phoneArray {return [self arrayForProperty:kABPersonPhoneProperty];}
+
+//R&P Addition
+- (NSArray *) strippedPhoneArray {
+    NSMutableArray *strippedPhoneArray = [[NSMutableArray alloc] init];
+    for(NSString *phoneNumber in self.phoneArray){
+        phoneNumber = [phoneNumber strippedNumberString];
+        [strippedPhoneArray addObject:phoneNumber];
+    }
+    return strippedPhoneArray;
+}
+
 - (NSArray *) phoneLabels {return [self labelsForProperty:kABPersonPhoneProperty];}
 - (NSArray *) relatedNameArray {return [self arrayForProperty:kABPersonRelatedNamesProperty];}
 - (NSArray *) relatedNameLabels {return [self labelsForProperty:kABPersonRelatedNamesProperty];}
@@ -387,6 +399,9 @@
 - (NSArray *) smsLabels {return [self labelsForProperty:kABPersonInstantMessageProperty];}
 
 - (NSString *) phonenumbers {return [self.phoneArray componentsJoinedByString:@" "];}
+//R&P Addition
+- (NSString *) strippedPhoneNumbers {return [self.strippedPhoneArray componentsJoinedByString:@" "];}
+
 - (NSString *) emailaddresses {return [self.emailArray componentsJoinedByString:@" "];}
 - (NSString *) urls {return [self.urlArray componentsJoinedByString:@" "];}
 
@@ -544,9 +559,9 @@
 - (void) setRelatedNameDictionaries: (NSArray *) dictionaries
 {
 	// kABWorkLabel, kABHomeLabel, kABOtherLabel
-	// kABPersonMotherLabel, kABPersonFatherLabel, kABPersonParentLabel, 
-	// kABPersonSisterLabel, kABPersonBrotherLabel, kABPersonChildLabel, 
-	// kABPersonFriendLabel, kABPersonSpouseLabel, kABPersonPartnerLabel, 
+	// kABPersonMotherLabel, kABPersonFatherLabel, kABPersonParentLabel,
+	// kABPersonSisterLabel, kABPersonBrotherLabel, kABPersonChildLabel,
+	// kABPersonFriendLabel, kABPersonSpouseLabel, kABPersonPartnerLabel,
 	// kABPersonManagerLabel, kABPersonAssistantLabel
 	ABMutableMultiValueRef multi = [self createMultiValueFromArray:dictionaries withType:kABMultiStringPropertyType];
 	[self setMulti:multi forProperty:kABPersonRelatedNamesProperty];
@@ -573,11 +588,11 @@
 
 - (void) setSmsDictionaries: (NSArray *) dictionaries
 {
-	// kABWorkLabel, kABHomeLabel, kABOtherLabel, 
+	// kABWorkLabel, kABHomeLabel, kABOtherLabel,
 	// kABPersonInstantMessageServiceKey, kABPersonInstantMessageUsernameKey
 	// kABPersonInstantMessageServiceYahoo, kABPersonInstantMessageServiceJabber
 	// kABPersonInstantMessageServiceMSN, kABPersonInstantMessageServiceICQ
-	// kABPersonInstantMessageServiceAIM, 
+	// kABPersonInstantMessageServiceAIM,
 	ABMutableMultiValueRef multi = [self createMultiValueFromArray:dictionaries withType:kABMultiDictionaryPropertyType];
 	[self setMulti:multi forProperty:kABPersonInstantMessageProperty];
 	// CFRelease(multi);
@@ -620,7 +635,7 @@
 	if (self.firstname) [dict setObject:self.firstname forKey:FIRST_NAME_STRING];
 	if (self.middlename) [dict setObject:self.middlename forKey:MIDDLE_NAME_STRING];
 	if (self.lastname) [dict setObject:self.lastname forKey:LAST_NAME_STRING];
-
+    
 	if (self.prefix) [dict setObject:self.prefix forKey:PREFIX_STRING];
 	if (self.suffix) [dict setObject:self.suffix forKey:SUFFIX_STRING];
 	if (self.nickname) [dict setObject:self.nickname forKey:NICKNAME_STRING];
@@ -634,13 +649,13 @@
 	if (self.department) [dict setObject:self.department forKey:DEPARTMENT_STRING];
 	
 	if (self.note) [dict setObject:self.note forKey:NOTE_STRING];
-
+    
 	if (self.kind) [dict setObject:self.kind forKey:KIND_STRING];
-
+    
 	if (self.birthday) [dict setObject:self.birthday forKey:BIRTHDAY_STRING];
 	if (self.creationDate) [dict setObject:self.creationDate forKey:CREATION_DATE_STRING];
 	if (self.modificationDate) [dict setObject:self.modificationDate forKey:MODIFICATION_DATE_STRING];
-
+    
 	[dict setObject:self.emailDictionaries forKey:EMAIL_STRING];
 	[dict setObject:self.addressDictionaries forKey:ADDRESS_STRING];
 	[dict setObject:self.dateDictionaries forKey:DATE_STRING];
@@ -656,7 +671,7 @@
 - (NSDictionary *) dictionaryRepresentation
 {
 	NSMutableDictionary *dict = [[[self baseDictionaryRepresentation] mutableCopy] autorelease];
-	if (ABPersonHasImageData(record)) 
+	if (ABPersonHasImageData(record))
 	{
 		CFDataRef imageData = ABPersonCopyImageData(record);
 		[dict setObject:(NSData *)imageData forKey:IMAGE_STRING];
@@ -672,7 +687,7 @@
 	NSDictionary *dict = [self baseDictionaryRepresentation];
 	NSData *data = [NSPropertyListSerialization dataFromPropertyList:dict format:NSPropertyListXMLFormat_v1_0 errorDescription:&errorString];
 	if (!data) CFShow(errorString);
-	return data; 
+	return data;
 }
 
 
@@ -708,7 +723,7 @@
 	if ([dict objectForKey:NOTE_STRING]) contact.note = [dict objectForKey:NOTE_STRING];
 	
 	if ([dict objectForKey:KIND_STRING]) contact.kind = [dict objectForKey:KIND_STRING];
-
+    
 	if ([dict objectForKey:EMAIL_STRING]) contact.emailDictionaries = [dict objectForKey:EMAIL_STRING];
 	if ([dict objectForKey:ADDRESS_STRING]) contact.addressDictionaries = [dict objectForKey:ADDRESS_STRING];
 	if ([dict objectForKey:DATE_STRING]) contact.dateDictionaries = [dict objectForKey:DATE_STRING];
@@ -716,14 +731,14 @@
 	if ([dict objectForKey:SMS_STRING]) contact.smsDictionaries = [dict objectForKey:SMS_STRING];
 	if ([dict objectForKey:URL_STRING]) contact.urlDictionaries = [dict objectForKey:URL_STRING];
 	if ([dict objectForKey:RELATED_STRING]) contact.relatedNameDictionaries = [dict objectForKey:RELATED_STRING];
-
-	if ([dict objectForKey:IMAGE_STRING]) 
+    
+	if ([dict objectForKey:IMAGE_STRING])
 	{
 		CFErrorRef error;
  		BOOL success = ABPersonSetImageData(contact.record, (CFDataRef) [dict objectForKey:IMAGE_STRING], &error);
 		if (!success) NSLog(@"Error: %@", [(NSError *)error localizedDescription]);
 	}
-
+    
 	return contact;
 }
 

@@ -20,6 +20,7 @@
 		8EE329C7103C928500FBD34F /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EE329C5103C928500FBD34F /* AddressBook.framework */; };
 		8EE329C8103C928500FBD34F /* AddressBookUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EE329C6103C928500FBD34F /* AddressBookUI.framework */; };
 		8EE32C92103CE3CD00FBD34F /* ABContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EE32C91103CE3CD00FBD34F /* ABContact.m */; };
+		DC4010D41603BE5D005104B0 /* NSString+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = DC4010D31603BE5D005104B0 /* NSString+Helpers.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,8 @@
 		8EE329C6103C928500FBD34F /* AddressBookUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBookUI.framework; path = "../Work/SDKStuff/99BOOK/C09 - PeoplePlacesThings/01a - Finding People/iphoneos2.0/System/Library/Frameworks/AddressBookUI.framework"; sourceTree = SOURCE_ROOT; };
 		8EE32C90103CE3CD00FBD34F /* ABContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABContact.h; sourceTree = "<group>"; };
 		8EE32C91103CE3CD00FBD34F /* ABContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABContact.m; sourceTree = "<group>"; };
+		DC4010D21603BE5D005104B0 /* NSString+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Helpers.h"; sourceTree = "<group>"; };
+		DC4010D31603BE5D005104B0 /* NSString+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Helpers.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +74,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				DC4010D01603BE50005104B0 /* Categories */,
 				8E6DF3EE103F101E00E12A1D /* ABGroup.h */,
 				8E6DF3EF103F101E00E12A1D /* ABGroup.m */,
 				8EE32C90103CE3CD00FBD34F /* ABContact.h */,
@@ -110,6 +114,15 @@
 			name = Support;
 			sourceTree = "<group>";
 		};
+		DC4010D01603BE50005104B0 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				DC4010D21603BE5D005104B0 /* NSString+Helpers.h */,
+				DC4010D31603BE5D005104B0 /* NSString+Helpers.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -137,7 +150,11 @@
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "HelloWorld" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* CustomTemplate */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -170,6 +187,7 @@
 				8EE3297D103C8A9400FBD34F /* ABContactsHelper.m in Sources */,
 				8EE32C92103CE3CD00FBD34F /* ABContact.m in Sources */,
 				8E6DF3F0103F101E00E12A1D /* ABGroup.m in Sources */,
+				DC4010D41603BE5D005104B0 /* NSString+Helpers.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

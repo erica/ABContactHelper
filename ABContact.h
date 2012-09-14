@@ -73,6 +73,7 @@
 @property (nonatomic, readonly) NSArray *emailArray;
 @property (nonatomic, readonly) NSArray *emailLabels;
 @property (nonatomic, readonly) NSArray *phoneArray;
+@property (nonatomic, readonly) NSArray *strippedPhoneArray; //R&P Addition
 @property (nonatomic, readonly) NSArray *phoneLabels;
 @property (nonatomic, readonly) NSArray *relatedNameArray;
 @property (nonatomic, readonly) NSArray *relatedNameLabels;
@@ -87,6 +88,7 @@
 
 @property (nonatomic, readonly) NSString *emailaddresses;
 @property (nonatomic, readonly) NSString *phonenumbers;
+@property (nonatomic, readonly) NSString *strippedPhoneNumbers; //R&P Addition
 @property (nonatomic, readonly) NSString *urls;
 
 // Each of these uses an array of dictionaries

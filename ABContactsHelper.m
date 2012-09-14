@@ -125,6 +125,16 @@
 	return [contacts filteredArrayUsingPredicate:pred];
 }
 
+//R&P Addition
+//Assumes the number being passed in has already been stripped
++ (NSArray *) contactsMatchingStrippedPhone: (NSString *) number
+{
+	NSPredicate *pred;
+	NSArray *contacts = [ABContactsHelper contacts];
+	pred = [NSPredicate predicateWithFormat:@"strippedPhoneNumbers contains[cd] %@", number];
+	return [contacts filteredArrayUsingPredicate:pred];
+}
+
 + (NSArray *) groupsMatchingName: (NSString *) fname
 {
 	NSPredicate *pred;
