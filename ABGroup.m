@@ -15,7 +15,11 @@
 // Thanks to Quentarez, Ciaran
 - (id) initWithRecord: (ABRecordRef) aRecord
 {
-	if (self = [super init]) record = CFRetain(aRecord);
+	if ((self = [super init]))
+  {
+   record = CFRetain(aRecord); 
+  }
+  
 	return self;
 }
 
