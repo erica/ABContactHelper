@@ -14,5 +14,4 @@
 + (ABAddressBookRef) addressBook;
 + (ABAddressBookRef) currentAddressBook;
 + (BOOL) save: (NSError **) error;
-+ (void) load;
 @end
