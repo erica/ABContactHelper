@@ -16,10 +16,27 @@
 #define BARBUTTON(TITLE, SELECTOR) [[UIBarButtonItem alloc] initWithTitle:TITLE style:UIBarButtonItemStylePlain target:self action:SELECTOR]
 #define IS_IPAD    (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
 
-@interface TestBedViewController : UIViewController <ABNewPersonViewControllerDelegate, ABPeoplePickerNavigationControllerDelegate>
+@interface TestBedViewController : UITableViewController <ABNewPersonViewControllerDelegate, ABPeoplePickerNavigationControllerDelegate>
+@property (strong, nonatomic) NSArray *contacts;
 @end
 
 @implementation TestBedViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    _contacts = [ABContactsHelper contacts];
+}
+
+#pragma mark - UITableViewDataSource
+- (int)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return _contacts.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ABContactCell"];
+    cell.textLabel.text = [_contacts[indexPath.row] compositeName];
+    return cell;
+}
 
 - (BOOL) ask: (NSString *) aQuestion
 {
