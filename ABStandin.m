@@ -15,11 +15,8 @@ static ABAddressBookRef shared = NULL;
 // Creating if needed
 + (ABAddressBookRef) addressBook
 {
-    ABAddressBookRef res;
     @synchronized (self) {
-        if (shared) {
-            res = shared;
-        } else {
+        if (!shared) {
             if (ABAddressBookCreateWithOptions == NULL) {
                 shared = ABAddressBookCreate();
             } else {

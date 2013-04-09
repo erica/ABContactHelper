@@ -11,6 +11,7 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
+		84F4AD08171404C4005C1954 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F4AD07171404C4005C1954 /* Default-568h@2x.png */; };
 		8E3EA0DB13AB9B7800D6C49B /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E3EA0DA13AB9B7800D6C49B /* Default-Portrait~ipad.png */; };
 		8E3EA0DD13AB9B9400D6C49B /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E3EA0DC13AB9B9400D6C49B /* Default-Landscape~ipad.png */; };
 		8E3EA0DF13AB9BA500D6C49B /* icon-iPad.png in Resources */ = {isa = PBXBuildFile; fileRef = 8E3EA0DE13AB9BA500D6C49B /* icon-iPad.png */; };
@@ -34,6 +35,7 @@
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* HelloWorld_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelloWorld_Prefix.pch; sourceTree = "<group>"; };
+		84F4AD07171404C4005C1954 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* HelloWorld-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "HelloWorld-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		8E3EA0DA13AB9B7800D6C49B /* Default-Portrait~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait~ipad.png"; sourceTree = "<group>"; };
 		8E3EA0DC13AB9B9400D6C49B /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				84F4AD07171404C4005C1954 /* Default-568h@2x.png */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 				8E7467A31406E36300B1B2D7 /* Address Book */,
 				8E7467C01407E73D00B1B2D7 /* Utility */,
@@ -212,6 +215,7 @@
 				8E3EA0E313AB9BB100D6C49B /* Default.png in Resources */,
 				8E3EA0E513AB9BB700D6C49B /* icon@2x.png in Resources */,
 				8E3EA0E713AB9BBC00D6C49B /* icon.png in Resources */,
+				84F4AD08171404C4005C1954 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
