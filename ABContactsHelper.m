@@ -5,80 +5,92 @@
  */
 
 #import "ABContactsHelper.h"
-
-#define CFAutorelease(obj) ({CFTypeRef _obj = (obj); (_obj == NULL) ? NULL : [(id)CFMakeCollectable(_obj) autorelease]; })
+#import "ABStandin.h"
 
 @implementation ABContactsHelper
-/*
- Note: You cannot CFRelease the addressbook after CFAutorelease(ABAddressBookCreate());
- */
+
+#pragma mark Address Book
+
 + (ABAddressBookRef) addressBook
 {
-	return CFAutorelease(ABAddressBookCreate());
+    return [ABStandin addressBook];
+}
+
++ (void) refresh
+{
+    [ABStandin currentAddressBook];
 }
 
 + (NSArray *) contacts
 {
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
-	NSArray *thePeople = (NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
-	NSMutableArray *array = [NSMutableArray arrayWithCapacity:thePeople.count];
-	for (id person in thePeople)
-		[array addObject:[ABContact contactWithRecord:(ABRecordRef)person]];
-	[thePeople release];
-	return array;
+    ABAddressBookRef addressBook = [ABStandin addressBook];
+    NSArray *thePeople = (__bridge_transfer NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:thePeople.count];
+    for (id person in thePeople)
+        [array addObject:[ABContact contactWithRecord:(__bridge ABRecordRef)person]];
+    return array;
 }
 
 + (int) contactsCount
 {
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
-	return ABAddressBookGetPersonCount(addressBook);
+    ABAddressBookRef addressBook = [ABStandin addressBook];
+    return ABAddressBookGetPersonCount(addressBook);
 }
 
 + (int) contactsWithImageCount
 {
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
-	NSArray *peopleArray = (NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
-	int ncount = 0;
-	for (id person in peopleArray) if (ABPersonHasImageData(person)) ncount++;
-	[peopleArray release];
-	return ncount;
+    ABAddressBookRef addressBook = [ABStandin addressBook];
+    NSArray *thePeople = (__bridge_transfer NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
+    int ncount = 0;
+    for (id person in thePeople) 
+    {
+        ABRecordRef abPerson = (__bridge ABRecordRef) person;
+        if (ABPersonHasImageData(abPerson)) ncount++;
+    }
+    return ncount;
 }
 
 + (int) contactsWithoutImageCount
 {
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
-	NSArray *peopleArray = (NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
-	int ncount = 0;
-	for (id person in peopleArray) if (!ABPersonHasImageData(person)) ncount++;
-	[peopleArray release];
-	return ncount;
+    ABAddressBookRef addressBook = [ABStandin addressBook];
+    NSArray *thePeople = (__bridge_transfer NSArray *)ABAddressBookCopyArrayOfAllPeople(addressBook);
+    int ncount = 0;
+    for (id person in thePeople) 
+    {
+        ABRecordRef abPerson = (__bridge ABRecordRef) person;
+        if (!ABPersonHasImageData(abPerson)) ncount++;
+    }
+    return ncount;
 }
 
 // Groups
 + (int) numberOfGroups
 {
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
-	NSArray *groups = (NSArray *)ABAddressBookCopyArrayOfAllGroups(addressBook);
-	int ncount = groups.count;
-	[groups release];
-	return ncount;
+    ABAddressBookRef addressBook = [ABStandin addressBook];
+    NSArray *groups = (__bridge_transfer NSArray *)ABAddressBookCopyArrayOfAllGroups(addressBook);
+    int ncount = groups.count;
+    return ncount;
 }
 
 + (NSArray *) groups
 {
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
-	NSArray *groups = (NSArray *)ABAddressBookCopyArrayOfAllGroups(addressBook);
-	NSMutableArray *array = [NSMutableArray arrayWithCapacity:groups.count];
-	for (id group in groups)
-		[array addObject:[ABGroup groupWithRecord:(ABRecordRef)group]];
-	[groups release];
-	return array;
+    ABAddressBookRef addressBook = [ABStandin addressBook];
+    NSArray *groups = (__bridge_transfer NSArray *)ABAddressBookCopyArrayOfAllGroups(addressBook);
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:groups.count];
+    for (id group in groups)
+    {
+        ABRecordRef abGroup = (__bridge ABRecordRef) group;
+        [array addObject:[ABGroup groupWithRecord:abGroup]];
+    }
+    return array;
 }
+
+#pragma mark Sorting
 
 // Sorting
 + (BOOL) firstNameSorting
 {
-	return (ABPersonGetCompositeNameFormat() == kABPersonCompositeNameFormatFirstNameFirst);
+    return (ABPersonGetCompositeNameFormat() == kABPersonCompositeNameFormatFirstNameFirst);
 }
 
 #pragma mark Contact Management
@@ -86,50 +98,84 @@
 // Thanks to Eridius for suggestions re: error
 + (BOOL) addContact: (ABContact *) aContact withError: (NSError **) error
 {
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
-	if (!ABAddressBookAddRecord(addressBook, aContact.record, (CFErrorRef *) error)) return NO;
-	return ABAddressBookSave(addressBook, (CFErrorRef *) error);
+    ABAddressBookRef addressBook = [ABStandin addressBook];
+    BOOL success;
+    CFErrorRef cfError = NULL;
+    
+    if (!aContact) return NO;
+
+    success = ABAddressBookAddRecord(addressBook, aContact.record, &cfError);
+    if (!success)
+    {
+        if (error)
+            *error = (__bridge_transfer NSError *)cfError;
+        return NO;
+    }
+
+    return YES;
 }
 
 + (BOOL) addGroup: (ABGroup *) aGroup withError: (NSError **) error
 {
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
-	if (!ABAddressBookAddRecord(addressBook, aGroup.record, (CFErrorRef *) error)) return NO;
-	return ABAddressBookSave(addressBook, (CFErrorRef *) error);
+    ABAddressBookRef addressBook = [ABStandin addressBook];
+    BOOL success;
+    CFErrorRef cfError = NULL;
+    
+    success = ABAddressBookAddRecord(addressBook, aGroup.record, &cfError);
+    if (!success)
+    {
+        if (error)
+            *error = (__bridge_transfer NSError *)cfError;
+        return NO;
+    }
+    
+    return NO;
 }
+
+#pragma mark Searches
 
 + (NSArray *) contactsMatchingName: (NSString *) fname
 {
-	NSPredicate *pred;
-	NSArray *contacts = [ABContactsHelper contacts];
-	pred = [NSPredicate predicateWithFormat:@"firstname contains[cd] %@ OR lastname contains[cd] %@ OR nickname contains[cd] %@ OR middlename contains[cd] %@", fname, fname, fname, fname];
-	return [contacts filteredArrayUsingPredicate:pred];
+    NSPredicate *pred;
+    NSArray *contacts = [ABContactsHelper contacts];
+    pred = [NSPredicate predicateWithFormat:@"firstname contains[cd] %@ OR lastname contains[cd] %@ OR nickname contains[cd] %@ OR middlename contains[cd] %@", fname, fname, fname, fname];
+    return [contacts filteredArrayUsingPredicate:pred];
 }
 
 + (NSArray *) contactsMatchingName: (NSString *) fname andName: (NSString *) lname
 {
-	NSPredicate *pred;
-	NSArray *contacts = [ABContactsHelper contacts];
-	pred = [NSPredicate predicateWithFormat:@"firstname contains[cd] %@ OR lastname contains[cd] %@ OR nickname contains[cd] %@ OR middlename contains[cd] %@", fname, fname, fname, fname];
-	contacts = [contacts filteredArrayUsingPredicate:pred];
-	pred = [NSPredicate predicateWithFormat:@"firstname contains[cd] %@ OR lastname contains[cd] %@ OR nickname contains[cd] %@ OR middlename contains[cd] %@", lname, lname, lname, lname];
-	contacts = [contacts filteredArrayUsingPredicate:pred];
-	return contacts;
+    NSPredicate *pred;
+    NSArray *contacts = [ABContactsHelper contacts];
+    pred = [NSPredicate predicateWithFormat:@"firstname contains[cd] %@ OR lastname contains[cd] %@ OR nickname contains[cd] %@ OR middlename contains[cd] %@", fname, fname, fname, fname];
+    contacts = [contacts filteredArrayUsingPredicate:pred];
+    pred = [NSPredicate predicateWithFormat:@"firstname contains[cd] %@ OR lastname contains[cd] %@ OR nickname contains[cd] %@ OR middlename contains[cd] %@", lname, lname, lname, lname];
+    contacts = [contacts filteredArrayUsingPredicate:pred];
+    return contacts;
 }
 
 + (NSArray *) contactsMatchingPhone: (NSString *) number
 {
+    NSPredicate *pred;
+    NSArray *contacts = [ABContactsHelper contacts];
+    pred = [NSPredicate predicateWithFormat:@"phonenumbers contains[cd] %@", number];
+    return [contacts filteredArrayUsingPredicate:pred];
+}
+
+// Thanks Frederic Bronner
++ (NSArray *) contactsMatchingOrganization: (NSString *) organization
+{
 	NSPredicate *pred;
 	NSArray *contacts = [ABContactsHelper contacts];
-	pred = [NSPredicate predicateWithFormat:@"phonenumbers contains[cd] %@", number];
+	pred = [NSPredicate predicateWithFormat:@"organization contains[cd] %@", organization];
 	return [contacts filteredArrayUsingPredicate:pred];
 }
 
+
 + (NSArray *) groupsMatchingName: (NSString *) fname
 {
-	NSPredicate *pred;
-	NSArray *groups = [ABContactsHelper groups];
-	pred = [NSPredicate predicateWithFormat:@"name contains[cd] %@ ", fname];
-	return [groups filteredArrayUsingPredicate:pred];
+    NSPredicate *pred;
+    NSArray *groups = [ABContactsHelper groups];
+    pred = [NSPredicate predicateWithFormat:@"name contains[cd] %@ ", fname];
+    return [groups filteredArrayUsingPredicate:pred];
 }
 @end

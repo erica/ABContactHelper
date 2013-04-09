@@ -6,8 +6,7 @@
 
 #import "ABGroup.h"
 #import "ABContactsHelper.h"
-
-#define CFAutorelease(obj) ({CFTypeRef _obj = (obj); (_obj == NULL) ? NULL : [(id)CFMakeCollectable(_obj) autorelease]; })
+#import "ABStandin.h"
 
 @implementation ABGroup
 @synthesize record;
@@ -15,44 +14,57 @@
 // Thanks to Quentarez, Ciaran
 - (id) initWithRecord: (ABRecordRef) aRecord
 {
-	if (self = [super init]) record = CFRetain(aRecord);
-	return self;
+    if (self = [super init]) record = CFRetain(aRecord);
+    return self;
+}
+
+- (void) dealloc
+{
+    if (record) 
+        CFRelease(record);
 }
 
 + (id) groupWithRecord: (ABRecordRef) grouprec
 {
-	return [[[ABGroup alloc] initWithRecord:grouprec] autorelease];
+    return [[ABGroup alloc] initWithRecord:grouprec];
 }
 
 + (id) groupWithRecordID: (ABRecordID) recordID
 {
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
-	ABRecordRef grouprec = ABAddressBookGetGroupWithRecordID(addressBook, recordID);
-	ABGroup *group = [self groupWithRecord:grouprec];
-	CFRelease(grouprec);
-	return group;
+    ABAddressBookRef addressBook = [ABStandin addressBook];
+    ABRecordRef grouprec = ABAddressBookGetGroupWithRecordID(addressBook, recordID);
+    ABGroup *group = [self groupWithRecord:grouprec];
+    return group;
 }
 
 // Thanks to Ciaran
 + (id) group
 {
-	ABRecordRef grouprec = ABGroupCreate();
-	id group = [ABGroup groupWithRecord:grouprec];
-	CFRelease(grouprec);
-	return group;
+    ABRecordRef grouprec = ABGroupCreate();
+    id group = [ABGroup groupWithRecord:grouprec];
+    CFRelease(grouprec);
+    return group;
 }
 
-- (void) dealloc
-{
-	if (record) CFRelease(record);
-	[super dealloc];
-}
 
+// Thanks to Eridius for suggestions re: error
+// Thanks Rincewind42 for the *error transfer bridging
 - (BOOL) removeSelfFromAddressBook: (NSError **) error
 {
-	ABAddressBookRef addressBook = CFAutorelease(ABAddressBookCreate());
-	if (!ABAddressBookRemoveRecord(addressBook, self.record, (CFErrorRef *) error)) return NO;
-	return ABAddressBookSave(addressBook,  (CFErrorRef *) error);
+    CFErrorRef cfError = NULL;
+    BOOL success;
+    
+    ABAddressBookRef addressBook = [ABStandin addressBook];
+    
+    success = ABAddressBookRemoveRecord(addressBook, self.record, &cfError);
+    if (!success)
+    {
+        if (error)
+            *error = (__bridge_transfer NSError *)cfError;
+        return NO;
+    }
+
+    return success;
 }
 
 #pragma mark Record ID and Type
@@ -63,52 +75,77 @@
 #pragma mark management
 - (NSArray *) members
 {
-	NSArray *contacts = (NSArray *)ABGroupCopyArrayOfAllMembers(self.record);
-	NSMutableArray *array = [NSMutableArray arrayWithCapacity:contacts.count];
-	for (id contact in contacts)
-		[array addObject:[ABContact contactWithRecord:(ABRecordRef)contact]];
-	[contacts release];
-	return array;
+    NSArray *contacts = (__bridge_transfer NSArray *)ABGroupCopyArrayOfAllMembers(self.record);
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:contacts.count];
+    for (id contact in contacts)
+        [array addObject:[ABContact contactWithRecord:(__bridge ABRecordRef)contact]];
+    return array;
 }
 
 // kABPersonSortByFirstName = 0, kABPersonSortByLastName  = 1
 - (NSArray *) membersWithSorting: (ABPersonSortOrdering) ordering
 {
-	NSArray *contacts = (NSArray *)ABGroupCopyArrayOfAllMembersWithSortOrdering(self.record, ordering);
-	NSMutableArray *array = [NSMutableArray arrayWithCapacity:contacts.count];
-	for (id contact in contacts)
-		[array addObject:[ABContact contactWithRecord:(ABRecordRef)contact]];
-	[contacts release];
-	return array;
+    NSArray *contacts = (__bridge_transfer NSArray *)ABGroupCopyArrayOfAllMembersWithSortOrdering(self.record, ordering);
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:contacts.count];
+    for (id contact in contacts)
+        [array addObject:[ABContact contactWithRecord:(__bridge ABRecordRef)contact]];
+    return array;
 }
 
 - (BOOL) addMember: (ABContact *) contact withError: (NSError **) error
 {
-	return ABGroupAddMember(self.record, contact.record, (CFErrorRef *) error);
+    CFErrorRef cfError = NULL;
+    BOOL success;
+    
+    success = ABGroupAddMember(self.record, contact.record, &cfError);
+    if (!success)
+    {
+        if (error)
+            *error = (__bridge_transfer NSError *)cfError;
+        return NO;
+    }
+    
+    return YES;
 }
 
 - (BOOL) removeMember: (ABContact *) contact withError: (NSError **) error
 {
-	return ABGroupRemoveMember(self.record, contact.record, (CFErrorRef *) error);
+    CFErrorRef cfError = NULL;
+    BOOL success;
+    
+    success = ABGroupRemoveMember(self.record, contact.record, &cfError);
+    if (!success)
+    {
+        if (error)
+            *error = (__bridge_transfer NSError *)cfError;
+        return NO;
+    }
+    
+    return YES;
 }
 
 #pragma mark name
 
 - (NSString *) getRecordString:(ABPropertyID) anID
 {
-	return [(NSString *) ABRecordCopyValue(record, anID) autorelease];
+    return (__bridge_transfer NSString *) ABRecordCopyValue(record, anID);
 }
 
 - (NSString *) name
 {
-	NSString *string = [self getRecordString:kABGroupNameProperty];
-	return string;
+    return [self getRecordString:kABGroupNameProperty];
 }
 
 - (void) setName: (NSString *) aString
 {
-	CFErrorRef error;
-	BOOL success = ABRecordSetValue(record, kABGroupNameProperty, (CFStringRef) aString, &error);
-	if (!success) NSLog(@"Error: %@", [(NSError *)error localizedDescription]);
+    CFErrorRef cfError = NULL;
+    BOOL success;
+    
+    success = ABRecordSetValue(record, kABGroupNameProperty, (__bridge CFStringRef) aString, &cfError);
+    if (!success)
+    {
+        NSError *error = (__bridge_transfer NSError *) cfError;
+        NSLog(@"Error: %@", error.localizedFailureReason);
+    }
 }
 @end
