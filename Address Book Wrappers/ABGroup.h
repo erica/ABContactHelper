@@ -1,6 +1,6 @@
 /*
  Erica Sadun, http://ericasadun.com
- iPhone Developer's Cookbook, 3.0 Edition
+ iPhone Developer's Cookbook, 6.0 Edition
  BSD License, Use at your own risk
  */
 
@@ -9,10 +9,6 @@
 #import "ABContact.h"
 
 @interface ABGroup : NSObject 
-{
-	ABRecordRef record;
-}
-
 + (id) group;
 + (id) groupWithRecord: (ABRecordRef) record;
 + (id) groupWithRecordID: (ABRecordID) recordID;

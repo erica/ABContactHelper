@@ -1,6 +1,6 @@
 /*
  Erica Sadun, http://ericasadun.com
- iPhone Developer's Cookbook, 3.0 Edition
+ iPhone Developer's Cookbook, 6.0 Edition
  BSD License, Use at your own risk
  */
 
@@ -14,6 +14,7 @@
 
 // Address Book
 + (ABAddressBookRef) addressBook;
++ (void) refresh;
 
 // Address Book Contacts and Groups
 + (NSArray *) contacts; // people
@@ -36,6 +37,7 @@
 + (NSArray *) contactsMatchingName: (NSString *) fname;
 + (NSArray *) contactsMatchingName: (NSString *) fname andName: (NSString *) lname;
 + (NSArray *) contactsMatchingPhone: (NSString *) number;
++ (NSArray *) contactsMatchingOrganization: (NSString *) organization;
 
 // Find groups
 + (NSArray *) groupsMatchingName: (NSString *) fname;
